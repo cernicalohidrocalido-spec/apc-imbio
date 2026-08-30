@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Análisis APC · IMBIO Aguascalientes</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header class="site-header site-header-imbio">
+  <div class="brand-group">
+    <span class="logo-ayto-wrap"><img class="logo-ayto" src="assets/img/logo_ayuntamiento.jpg" alt="IMBIO"></span>
+    <div>
+      <div class="brand"><span class="leaf">🌿</span> Áreas prioritarias para la conservación</div>
+      <div class="creditos-header">IMBIO · SSMAA · Catálogo POF 2025</div>
+    </div>
+  </div>
+  <nav class="site-nav">
+    <a href="index.html">Inicio</a>
+    <a href="visor.html">Visor de mapa</a>
+    <a href="apc.html">Fichas APC</a>
+    <a href="analisis.html" class="active">Análisis</a>
+  </nav>
+</header>
+
+<main>
+  <h1 style="color:var(--verde-oscuro); font-size:1.5rem; margin-bottom:6px;">Análisis del catálogo APC</h1>
+  <p class="analisis-intro">Superficie y composición del catálogo POF 2025 (SSMAA). Total oficial: <strong>60,956.61 ha</strong> en 739 polígonos.</p>
+
+  <div class="stats-grid" id="apcStatsGrid">
+    <div class="stat-card"><div class="num" id="apcStatPoligonos">—</div><div class="label">polígonos APC</div></div>
+    <div class="stat-card"><div class="num" id="apcStatHa">—</div><div class="label">hectáreas prioritarias</div></div>
+    <div class="stat-card"><div class="num" id="apcStatPrimario">—</div><div class="label">ha vegetación primaria</div></div>
+    <div class="stat-card"><div class="num" id="apcStatSecundario">—</div><div class="label">ha vegetación secundaria</div></div>
+  </div>
+
+  <div class="tabla-wrap">
+    <table class="tabla-anp">
+      <caption>Superficie APC por tipo de vegetación</caption>
+      <thead><tr><th>No.</th><th>Tipo de vegetación</th><th>Superficie (ha)</th><th>% del total</th></tr></thead>
+      <tbody id="apcTablaBody"></tbody>
+      <tfoot><tr><td colspan="2">TOTAL APC</td><td id="apcTotalCell">—</td><td>100%</td></tr></tfoot>
+    </table>
+    <p class="nota-tabla" id="apcNota">—</p>
+  </div>
+
+  <div class="charts-row">
+    <div class="chart-box"><h2>Superficie por tipo de vegetación</h2><canvas id="chartVegetacion"></canvas></div>
+    <div class="chart-box"><h2>Primario vs secundario</h2><canvas id="chartEstado"></canvas></div>
+  </div>
+
+  <div class="chart-box">
+    <h2>ANP decretadas + áreas prioritarias para la conservación</h2>
+    <canvas id="chartCombinada" height="110"></canvas>
+    <p class="nota-tabla" style="padding-left:0;" id="apcCombinadaNota">—</p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <p>Áreas prioritarias para la conservación · IMBIO · SSMAA · Catálogo POF 2025</p>
+  <p>Instituto Municipal de Biodiversidad y Protección Ambiental · Pabellón de Arteaga</p>
+</footer>
+
+<script src="js/datos.js"></script>
+<script>
+const TOTAL_NET_ANP = 152422.50;
+const PCT_ESTADO_ANP = 27.11;
+
+function formatoHa(n) {
+  return n.toLocaleString('es-MX', { maximumFractionDigits: 2 }) + ' ha';
+}
+
+async function init() {
+  const meta = await cargarAPCMeta();
+  document.getElementById('apcStatPoligonos').textContent = meta.totalPoligonos.toLocaleString('es-MX');
+  document.getElementById('apcStatHa').textContent = formatoHa(meta.totalHectareas);
+  document.getElementById('apcStatPrimario').textContent = formatoHa(meta.estadosConservacion.PRIMARIO || 0);
+  document.getElementById('apcStatSecundario').textContent = formatoHa(meta.estadosConservacion.SECUNDARIO || 0);
+  document.getElementById('apcTotalCell').textContent = formatoHa(meta.totalHectareas);
+  document.getElementById('apcNota').textContent = meta.nota + ' · Fuente: ' + meta.fuente;
+
+  const tipos = Object.entries(meta.tiposVegetacion).sort((a, b) => b[1] - a[1]);
+  document.getElementById('apcTablaBody').innerHTML = tipos.map(([tipo, ha], i) =>
+    `<tr><td>${i + 1}</td><td>${tituloVegetacion(tipo)}</td><td>${formatoHa(ha)}</td><td>${((ha / meta.totalHectareas) * 100).toFixed(2)}%</td></tr>`
+  ).join('');
+
+  const totalCombinada = TOTAL_NET_ANP + meta.totalHectareas;
+  const pctCombinada = (totalCombinada / (TOTAL_NET_ANP / (PCT_ESTADO_ANP / 100))) * 100;
+  document.getElementById('apcCombinadaNota').textContent =
+    `ANP decretadas (${formatoHa(TOTAL_NET_ANP)}, territorio real) + APC (${formatoHa(meta.totalHectareas)}) = ${formatoHa(totalCombinada)}, equivalente al ${pctCombinada.toFixed(2)}% del territorio estatal. ANP: <a href="https://anp.imbio.info/analisis.html">SANPEA</a>.`;
+
+  new Chart(document.getElementById('chartVegetacion'), {
+    type: 'bar',
+    data: {
+      labels: tipos.map(([t]) => tituloVegetacion(t)),
+      datasets: [{ label: 'Hectáreas', data: tipos.map(([, ha]) => ha), backgroundColor: '#7c3aed' }],
+    },
+    options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Hectáreas' } } } },
+  });
+
+  new Chart(document.getElementById('chartEstado'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Primario', 'Secundario'],
+      datasets: [{
+        data: [meta.estadosConservacion.PRIMARIO, meta.estadosConservacion.SECUNDARIO],
+        backgroundColor: ['#fbbf24', '#c4b5fd'],
+      }],
+    },
+  });
+
+  new Chart(document.getElementById('chartCombinada'), {
+    type: 'bar',
+    data: {
+      labels: [['ANP decretadas', '(territorio real)'], ['ANP + APC']],
+      datasets: [{ data: [TOTAL_NET_ANP, totalCombinada], backgroundColor: ['#2d6a4f', '#7c3aed'] }],
+    },
+    options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Hectáreas' } } } },
+  });
+}
+init();
+</script>
+</body>
+</html>

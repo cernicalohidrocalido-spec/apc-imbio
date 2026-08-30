@@ -1,0 +1,239 @@
+[
+  {
+    "id": "cerro-del-muerto",
+    "nombre": "ANP Cerro del Muerto",
+    "nivel": "Estatal",
+    "categoria_manejo": "Monumento Natural",
+    "municipios": "Aguascalientes, Jesús María",
+    "hectareas": 5862.034,
+    "fecha_decreto": "Decretado el 19 de mayo de 2008, publicado en el Periódico Oficial del Estado el 26 de mayo de 2008",
+    "descripcion": "Serranía emblemática de la capital del estado, parte del macizo conocido como Sierra de Guajolotes. Presenta bosque de encino tipo matorral, matorral espinoso y pastizales, con 115 especies de plantas vasculares registradas (mezquite, huizache, nopal, biznaga, encino), 17 especies de anfibios y reptiles, numerosas aves (halcón peregrino, guajolote silvestre) y 20 especies de mamíferos como coyote, puma, gato montés y venado cola blanca. Por su cercanía a la ciudad de Aguascalientes es un punto muy visitado para recreación, deporte y ecoturismo (el Picacho), lo que también la expone a un uso desordenado y deterioro.",
+    "pdfs": {
+      "decreto": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/cerro-del-muerto_decreto.pdf",
+      "programa_manejo": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/cerro-del-muerto_programa-manejo.pdf"
+    }
+  },
+  {
+    "id": "cobos-parga",
+    "nombre": "ANP Bosque de Cobos-Parga",
+    "nivel": "Estatal",
+    "categoria_manejo": "Área de Gestión de Hábitat de Especies",
+    "municipios": "Aguascalientes",
+    "hectareas": 176.66,
+    "fecha_decreto": "Decreto publicado en el Periódico Oficial del Estado el 5 de junio de 2019; Programa de Manejo publicado el 1 de febrero de 2021",
+    "descripcion": "Ubicada al sur de la capital, en el antiguo predio conocido como Rancho Parga (usado hasta 2003 para cría de avestruz y abandonado 15 años). Predomina el matorral crasicaule (mezquiteras y nopaleras) con 125 especies de flora registradas y vegetación de galería de sauces a lo largo de los arroyos Cobos y Parga. Alberga 8 especies de reptiles, 46 de aves (incluyendo gavilanes y aguililla bajo protección especial) y 12 de mamíferos, entre ellos dos especies de murciélago amenazadas. La zona conserva además vestigios arqueológicos prehispánicos (600-900 d.C.) en proceso de investigación.",
+    "pdfs": {
+      "decreto": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/cobos-parga_decreto.pdf",
+      "programa_manejo": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/cobos-parga_programa-manejo.pdf"
+    }
+  },
+  {
+    "id": "serrania-de-juan-grande",
+    "nombre": "Área de Protección del Águila Real de la Serranía de Juan Grande",
+    "nivel": "Federal",
+    "categoria_manejo": "Certificación voluntaria CONANP (área destinada a la conservación por el ejido)",
+    "municipios": "El Llano",
+    "hectareas": 2589.45,
+    "fecha_decreto": "Certificado CONANP-76/2006, expedido el 7 de noviembre de 2006, con vigencia de 50 años",
+    "descripcion": "Terrenos de uso común del Ejido Palo Alto, destinados voluntariamente por sus ejidatarios a la conservación. Ocupa las estribaciones de la Serranía de Juan Grande, con vegetación de pastizal-huizachal, matorral crasicaule y bosquete abierto de encino arbustivo. Alberga especies como rata canguro, tórtola y paloma de alas blancas, y constituye un área de nidación del águila real (Aquila chrysaetos), motivo principal de su certificación.",
+    "pdfs": {
+      "certificacion": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/serrania-de-juan-grande_certificado-conanp.pdf",
+      "estudio_previo_justificativo": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/serrania-de-juan-grande_epj.pdf"
+    }
+  },
+  {
+    "id": "advc-san-jose",
+    "nombre": "Santuario para el Águila Real en los Bienes Comunales de San José de Gracia",
+    "nivel": "Federal",
+    "categoria_manejo": "Certificación voluntaria CONANP (Área Destinada Voluntariamente a la Conservación - ADVC, tipo Comunidades)",
+    "municipios": "San José de Gracia",
+    "hectareas": 6170.0,
+    "fecha_decreto": "Certificado CONANP-388/2015, expedido el 7 de agosto de 2015, con vigencia de 30 años",
+    "descripcion": "Bienes comunales de San José de Gracia destinados voluntariamente a la conservación, con ecosistemas de bosque de pino-encino y pastizal. Constituye un santuario para el águila real (Aquila chrysaetos). Alberga especies bajo protección en la NOM-059-SEMARNAT como el tejón (Taxidea taxus), musaraña orejona (Cryptotis parva), murciélago trompudo (Choeronycteris mexicana), murciélago hocicudo mayor (Leptonycteris nivalis), cacomixtle (Bassariscus astutus) y liebre cola negra (Lepus californicus), así como especies de flora como biznagas (Ferocactus histrix, Mammillaria bombycina, Mammillaria perezdelarosae).",
+    "pdfs": {
+      "listado_advc_conanp": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/advc-san-jose_listado-conanp-2025.pdf"
+    }
+  },
+  {
+    "id": "sierra-del-laurel",
+    "nombre": "ANP Sierra del Laurel",
+    "nivel": "Estatal",
+    "categoria_manejo": "Área Silvestre Estatal",
+    "municipios": "Calvillo, Aguascalientes, Jesús María",
+    "hectareas": 29851.84,
+    "fecha_decreto": "Decretado el 26 de septiembre de 2016, publicado en el Periódico Oficial del Estado el 3 de octubre de 2016",
+    "descripcion": "Corredor biológico entre la Sierra Fría (al norte) y el Cerro del Muerto (al oriente), con bosques de encino, bosque de encino-pino, selva baja caducifolia, matorral xerófilo y pastizal natural. Alberga al laurel silvestre, especie en peligro de extinción de gran valor cultural y alimenticio, además de guacamaya verde mexicana, ocelote y una gran diversidad de peces, anfibios, reptiles, aves (80 especies) y mamíferos (20 especies).",
+    "pdfs": {
+      "decreto": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/sierra-del-laurel_decreto.pdf",
+      "programa_manejo": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/sierra-del-laurel_programa-manejo.pdf",
+      "decreto_federal_cadnr043": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/sierra-del-laurel_decreto-federal-cadnr043.pdf"
+    }
+  },
+  {
+    "id": "cadnr-043",
+    "nombre": "C.A.D.N.R. 043 Estado de Nayarit (porción Aguascalientes)",
+    "nivel": "Federal",
+    "categoria_manejo": "APRN (Área de Protección de los Recursos Naturales - Zona Protectora Forestal)",
+    "municipios": "Calvillo, Jesús María, San José de Gracia, Aguascalientes",
+    "hectareas": 66576.18,
+    "fecha_decreto": "1949-08-03 (Decreto Presidencial original, mismo origen que C.A.D.N.R. 001 Pabellón); última reforma DOF 2002-11-07",
+    "descripcion": "Zona Protectora Forestal y de Repoblación declarada mediante Decreto Presidencial del 8 de junio de 1949 (publicado el 3 de agosto de 1949) para proteger las cuencas de alimentación de las obras de irrigación del Distrito Nacional de Riego 043, denominado \"Estado de Nayarit\". Su superficie total abarca porciones de cinco estados (Aguascalientes, Jalisco, Durango, Nayarit y Zacatecas). Dentro de Aguascalientes se distribuye en tres fragmentos que se sobreponen con las áreas naturales protegidas estatales Sierra Fría y Sierra del Laurel. El 7 de noviembre de 2002 la SEMARNAT recategorizó el área como Área de Protección de los Recursos Naturales conforme a la Ley General del Equilibrio Ecológico y la Protección al Ambiente vigente, sin modificar su delimitación ni sus disposiciones originales.",
+    "pdfs": {
+      "decreto_federal": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/cadnr-043_decreto.pdf",
+      "decreto_federal_porcion_sierra_del_laurel": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/sierra-del-laurel_decreto-federal-cadnr043.pdf"
+    }
+  },
+  {
+    "id": "sierra-fria",
+    "nombre": "ANP Sierra Fría",
+    "nivel": "Estatal",
+    "categoria_manejo": "Área Silvestre Estatal",
+    "municipios": "Calvillo, Jesús María, Pabellón de Arteaga, Rincón de Romos, San José de Gracia",
+    "hectareas": 106595.61,
+    "fecha_decreto": "Decreto Número 88, expedido por el H. Congreso del Estado el 30 de enero de 1994, publicado por segunda ocasión en el Periódico Oficial del Estado el 9 de abril de 1995; recategorizada como Área Silvestre Estatal el 17 de agosto de 2015; corrección técnica el 12 de septiembre de 2018",
+    "descripcion": "La ANP estatal de mayor extensión de Aguascalientes, ubicada al noroeste de la entidad, declarada originalmente por causa de utilidad pública como \"Zona sujeta a Conservación Ecológica\" mediante el Decreto Número 88 de la H. LV Legislatura, con una superficie decretada de 112,090 hectáreas. Constituye, junto con Sierra del Laurel y Cerro del Muerto, parte del corredor biológico montañoso más importante del estado. El decreto original establece tres tipos de zonificación: Áreas de Preservación Ecológica (dedicadas a investigación científica), Áreas de Protección, Restauración y Aprovechamiento (aprovechamiento sustentable de recursos naturales) y Áreas de Uso Público (turismo de bajo impacto). Declara veda total e indefinida de caza y captura de especies como águila real, halcón peregrino, halcón mexicano, puma, gato montés, pato altiplanero mexicano y cacomixtle, así como veda total de colecta de especies de flora silvestre endémicas y en peligro de extinción (Coreopsis mcvaughii, Odontotrichum amplum, Viguiera rosei), además de todas las especies endémicas, raras, amenazadas o en peligro de extinción presentes en la zona.",
+    "pdfs": {
+      "decreto_original_1994": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/sierra-fria_decreto-original-1994.pdf",
+      "decreto_recategorizacion": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/sierra-fria_decreto.pdf",
+      "programa_manejo": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/sierra-fria_programa-manejo.pdf"
+    }
+  },
+  {
+    "id": "el-tecolote",
+    "nombre": "ANP El Tecolote (antes \"La Ignominia\")",
+    "nivel": "Estatal",
+    "categoria_manejo": "Área de Gestión de Hábitat de Especies",
+    "municipios": "Aguascalientes",
+    "hectareas": 513.41,
+    "fecha_decreto": "Decretada como ANP el 13 de julio de 2015 (bajo el nombre \"La Ignominia\"); renombrada a \"El Tecolote\" el 12 de septiembre de 2018",
+    "descripcion": "Predio propiedad del Gobierno del Estado, colindante con el sitio RAMSAR \"El Jagüey\". Está conformado por matorral xerófilo con pastizal natural y alberga alrededor de 24 especies de mamíferos (incluyendo dos murciélagos bajo protección), 75 especies de aves (con tres rapaces sujetas a protección especial) y 6 especies de reptiles bajo distintas categorías de riesgo. El área fue renombrada de \"La Ignominia\" a \"El Tecolote\" para hacerla coincidir con el nombre real del predio en las escrituras públicas.",
+    "pdfs": {
+      "decreto": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/el-tecolote_decreto.pdf",
+      "programa_manejo": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/el-tecolote_programa-manejo.pdf"
+    }
+  },
+  {
+    "id": "penuelas",
+    "nombre": "ANP Ex Hacienda de Peñuelas",
+    "nivel": "Estatal",
+    "categoria_manejo": "Área de Gestión de Hábitat de Especies",
+    "municipios": "Aguascalientes",
+    "hectareas": 347.60,
+    "fecha_decreto": "Decretada el 18 de agosto de 2022, publicada en el Periódico Oficial del Estado el 22 de agosto de 2022",
+    "descripcion": "Ubicada a 13 km al sur de la ciudad de Aguascalientes, sobre la carretera federal 45, abarca los predios San Nicolás, San Isidro, Eloteros y Angostura, propiedad del Gobierno del Estado. Alberga un bosque nativo de mezquite (Prosopis laevigata) y huizache ligado por más de tres siglos a la Ex Hacienda de Peñuelas y al Camino Real de Tierra Adentro (Patrimonio de la Humanidad UNESCO desde 2010). Registra 80 especies de vertebrados, entre ellas 6 sujetas a protección especial y 7 amenazadas, como la rana de madriguera (endémica de México) y el murciélago trompudo, polinizador clave del maguey para la producción de mezcal. Incluye la presa San Nicolás y humedales estacionales de importancia para aves migratorias.",
+    "pdfs": {
+      "decreto": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/penuelas_decreto.pdf",
+      "programa_manejo": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/penuelas_programa-manejo.pdf"
+    }
+  },
+  {
+    "id": "cadnr-001-pabellon",
+    "nombre": "C.A.D.N.R. 001 Pabellón (Área de Protección de Recursos Naturales)",
+    "nivel": "Federal",
+    "categoria_manejo": "APRN (Área de Protección de los Recursos Naturales - Zona Protectora Forestal)",
+    "municipios": "Aguascalientes: Calvillo, Jesús María, Rincón de Romos, Pabellón de Arteaga y San José de Gracia; Zacatecas: Cuauhtémoc, Guadalupe, Genaro Codina, Ojocaliente y Villanueva",
+    "hectareas": 58583.08,
+    "fecha_decreto": "1949-08-03 (decreto original); última reforma DOF 2002-11-07",
+    "descripcion": "Zona Protectora Forestal y de Repoblación declarada mediante Decreto Presidencial del 8 de junio de 1949 (publicado el 3 de agosto de 1949 en el Diario Oficial de la Federación) para proteger las cuencas de alimentación de las obras de irrigación del Distrito Nacional de Riego 001 Pabellón, mitigando la erosión de suelos, el azolve de presas y canales, y la reducción en la recarga de los mantos acuíferos. El 7 de noviembre de 2002 la SEMARNAT recategorizó el área como Área de Protección de los Recursos Naturales conforme a la Ley General del Equilibrio Ecológico y la Protección al Ambiente vigente, sin modificar su delimitación ni sus disposiciones originales. Abarca cuencas hidrológicas compartidas entre los estados de Aguascalientes y Zacatecas, siendo una de las áreas naturales protegidas de mayor extensión en la entidad.",
+    "pdfs": {
+      "decreto_federal": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/cadnr-001-pabellon_decreto-federal.pdf",
+      "recategorizacion": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/cadnr-001-pabellon_recategorizacion.pdf"
+    }
+  },
+  {
+    "id": "centro-ecologico-enriqueta-medellin",
+    "nombre": "Centro Ecológico Queta Medellín Legorreta",
+    "nivel": "Estatal",
+    "categoria_manejo": "Área de Conservación Social",
+    "municipios": "Aguascalientes",
+    "hectareas": 16.2462,
+    "fecha_decreto": "Expedida el 8 de marzo de 2022, publicada en el Periódico Oficial del Estado el 12 de abril de 2022",
+    "descripcion": "Ubicado al sur de la ciudad de Aguascalientes, sobre la carretera Salto de los Salado, kilómetro 2.5, en un predio propiedad del Gobierno del Estado conocido como el Centro Productor de Árboles. Protege 16-24-62.01 hectáreas de vegetación inducida como sitio de promoción y conservación del ambiente urbano, dedicado a la producción y propagación de árboles y plantas nativas para reforestación, elaboración de composta orgánica, y educación ambiental (ecotecnias, desarrollo sustentable, huertos urbanos, farmacia viviente, protección de polinizadores y monitoreo de fauna). Recibe su nombre como reconocimiento póstumo a la Dra. Enriqueta \"Queta\" Medellín Legorreta por su labor en la preservación de los recursos naturales de Aguascalientes. Por su cercanía al área urbana, funciona como alternativa accesible para actividades al aire libre y conexión con la naturaleza, aportando servicios ambientales como purificación del aire, control de erosión, captación de agua y refugio de fauna silvestre.",
+    "pdfs": {
+      "decreto": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/centro-ecologico-enriqueta-medellin_decreto.pdf"
+    }
+  },
+  {
+    "id": "el-mezquite",
+    "nombre": "ANP El Mezquite (Refugio de Flora y Fauna)",
+    "nivel": "Municipal",
+    "categoria_manejo": "Refugio de Flora y Fauna Municipal",
+    "municipios": "Pabellón de Arteaga",
+    "hectareas": 1058.75,
+    "fecha_decreto": "Decretada el 31 de marzo de 2021 por el H. Ayuntamiento de Pabellón de Arteaga, publicada en el Periódico Oficial del Estado el 19 de abril de 2021",
+    "descripcion": "Zona natural al norte del municipio de Pabellón de Arteaga, declarada Refugio de Flora y Fauna de competencia municipal con el objetivo de conservar la vegetación natural, los bienes y servicios ambientales del área, así como rescatar y conservar vestigios prehispánicos localizados dentro del polígono. Su administración corresponde al Instituto Municipal de Biodiversidad y Protección Ambiental de Pabellón de Arteaga. Nota: en la capa cartográfica estatal (catálogo de UGA) esta misma poligonal aparece identificada como \"Cerro de La Sabina\"; el nombre oficial conforme al decreto municipal es \"El Mezquite\".",
+    "pdfs": {
+      "decreto": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/barranca-santiago-mezquite-vivero_decreto-conjunto.pdf",
+      "estudio_previo_justificativo": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/epj-el-mezquite_documento.pdf"
+    }
+  },
+  {
+    "id": "barranca-de-santiago",
+    "nombre": "ANP Barranca de Santiago y Garabato",
+    "nivel": "Municipal",
+    "categoria_manejo": "Monumento Natural",
+    "municipios": "Pabellón de Arteaga",
+    "hectareas": 3203.24,
+    "fecha_decreto": "Decretada el 31 de marzo de 2021 por el H. Ayuntamiento de Pabellón de Arteaga, publicada en el Periódico Oficial del Estado el 19 de abril de 2021",
+    "descripcion": "Barranca ubicada al norte del municipio de Pabellón de Arteaga, colindante con San José de Gracia y Jesús María, protegida bajo la categoría de Monumento Natural con el fin de conservar su vegetación natural y servicios ambientales, potenciar su valor histórico, paisajístico, recreativo, educativo y turístico, y rescatar los vestigios prehispánicos presentes en el área. Su administración corresponde al Instituto Municipal de Biodiversidad y Protección Ambiental de Pabellón de Arteaga.",
+    "pdfs": {
+      "decreto": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/barranca-santiago-mezquite-vivero_decreto-conjunto.pdf",
+      "estudio_previo_justificativo": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/barranca-de-santiago_epj.pdf"
+    }
+  },
+  {
+    "id": "cobos",
+    "nombre": "ANP Cobos",
+    "nivel": "Municipal",
+    "categoria_manejo": "Zona de Conservación Ecológica de los Centros de Población",
+    "municipios": "Aguascalientes",
+    "hectareas": 98.2,
+    "fecha_decreto": "Aprobada el 9 de agosto de 2019 por el H. Ayuntamiento de Aguascalientes, publicada en el Periódico Oficial del Estado el 23 de septiembre de 2019",
+    "descripcion": "Predio conocido como \"Las Violetas\", ubicado en la Delegación Morelos, al oriente de la ciudad de Aguascalientes. Administrado por la Secretaría de Medio Ambiente y Desarrollo Sustentable del Municipio de Aguascalientes a través del Área de Recursos Naturales y Biodiversidad, con el objetivo de conservar los ecosistemas del área y aprovechar de forma sustentable su valor recreativo y educativo dentro de la mancha urbana.",
+    "pdfs": {
+      "decreto": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/cobos_decreto.pdf"
+    }
+  },
+  {
+    "id": "la-pona",
+    "nombre": "ANP La Pona",
+    "nivel": "Municipal",
+    "categoria_manejo": "Zona de Conservación Ecológica de la Ciudad de Aguascalientes",
+    "municipios": "Aguascalientes",
+    "hectareas": 18.25,
+    "fecha_decreto": "Aprobada el 9 de octubre de 2018 por el H. Ayuntamiento de Aguascalientes, publicada en el Periódico Oficial del Estado el 12 de noviembre de 2018",
+    "descripcion": "Predio conocido como \"La Pona\", ubicado en la Delegación Jesús Terán, al oriente de la ciudad de Aguascalientes. Administrado por la Secretaría de Medio Ambiente y Desarrollo Sustentable del Municipio de Aguascalientes, con el propósito de conservar los ecosistemas del área, sus bienes y servicios ambientales dentro de la zona urbana, y aprovechar de forma sustentable su valor recreativo y educativo.",
+    "pdfs": {
+      "decreto": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/la-pona_decreto.pdf",
+      "programa_manejo": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/la-pona_programa-manejo.pdf"
+    }
+  },
+  {
+    "id": "cema-calvillo",
+    "nombre": "ANP Centro de Educación Medio Ambiental de Calvillo (CEMA)",
+    "nivel": "Municipal",
+    "categoria_manejo": "Zona de Conservación Ecológica Municipal",
+    "municipios": "Calvillo",
+    "hectareas": 13.22,
+    "fecha_decreto": "Aprobada el 7 de junio de 2023 por el H. Ayuntamiento de Calvillo, publicada en el Periódico Oficial del Estado el 26 de junio de 2023",
+    "descripcion": "Área ubicada en el municipio de Calvillo, declarada Zona de Conservación Ecológica Municipal con el fin de conservar el uso de suelo de conservación y la vegetación del sitio, así como sus bienes y servicios ambientales. Funciona como centro de educación ambiental regional que fomenta el reconocimiento y aprecio de los recursos naturales. Su administración corresponde a la Secretaría de Planeación, Ordenamiento Territorial y Medio Ambiente de Calvillo.",
+    "pdfs": {
+      "decreto": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/cema-calvillo_decreto.pdf",
+      "estudio_previo_justificativo": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/cema-calvillo_epj.pdf"
+    }
+  },
+  {
+    "id": "vivero-conafor",
+    "nombre": "ANP Zona de Conservación Ecológica Municipal Vivero Forestal CONAFOR",
+    "nivel": "Municipal",
+    "categoria_manejo": "Zona de Conservación Ecológica Municipal",
+    "municipios": "Pabellón de Arteaga",
+    "hectareas": 8.72,
+    "fecha_decreto": "Decretada el 31 de marzo de 2021 por el H. Ayuntamiento de Pabellón de Arteaga, publicada en el Periódico Oficial del Estado el 19 de abril de 2021",
+    "descripcion": "Vivero forestal municipal ubicado dentro de la cabecera de Pabellón de Arteaga, declarado Zona de Conservación Ecológica Municipal para conservar sus árboles y vegetación, así como sus bienes y servicios ambientales, y para funcionar como centro de educación ambiental regional. Su administración corresponde al Instituto Municipal de Biodiversidad y Protección Ambiental de Pabellón de Arteaga.",
+    "pdfs": {
+      "decreto": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/barranca-santiago-mezquite-vivero_decreto-conjunto.pdf",
+      "estudio_previo_justificativo": "https://cernicalohidrocalido-spec.github.io/anp-aguascalientes/assets/pdfs/epj-vivero-conafor_documento.pdf"
+    }
+  }
+]

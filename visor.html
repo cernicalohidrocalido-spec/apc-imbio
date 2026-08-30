@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visor APC · IMBIO Aguascalientes</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header site-header-imbio">
+  <div class="brand-group">
+    <span class="logo-ayto-wrap"><img class="logo-ayto" src="assets/img/logo_ayuntamiento.jpg" alt="IMBIO"></span>
+    <div>
+      <div class="brand"><span class="leaf">🌿</span> Áreas prioritarias para la conservación</div>
+      <div class="creditos-header">IMBIO · SSMAA · Estado de Aguascalientes</div>
+    </div>
+  </div>
+  <nav class="site-nav">
+    <a href="index.html">Inicio</a>
+    <a href="visor.html" class="active">Visor de mapa</a>
+    <a href="apc.html">Fichas APC</a>
+    <a href="analisis.html">Análisis</a>
+  </nav>
+</header>
+
+<main>
+  <h1 style="color:var(--verde-oscuro); font-size:1.4rem; margin-bottom:14px;">Visor APC · contexto ANP</h1>
+  <div class="visor-layout">
+    <div class="panel-lateral">
+      <div class="apc-controls">
+        <h2>Áreas prioritarias (APC)</h2>
+        <label class="ndvi-toggle">
+          <input type="checkbox" id="chkApc">
+          Mostrar polígonos APC
+        </label>
+        <p class="ndvi-hint">739 polígonos · 60,956.61 ha · Catálogo POF 2025. <a href="apc.html">Ver fichas →</a></p>
+        <div class="apc-leyenda">
+          <span class="apc-leyenda-item apc-primario">Primario</span>
+          <span class="apc-leyenda-item apc-secundario">Secundario</span>
+        </div>
+      </div>
+      <div class="ndvi-controls">
+        <h2>Cobertura vegetal (NDVI)</h2>
+        <label class="ndvi-toggle">
+          <input type="checkbox" id="chkNdvi">
+          Mostrar capa NDVI recortada
+        </label>
+        <p class="ndvi-hint">Recortada a la ANP seleccionada; sin selección, a todas las ANP de contexto. Clic en mapa para consultar NDVI.</p>
+        <label class="ndvi-field">
+          Año
+          <select id="selNdviYear"></select>
+        </label>
+        <label class="ndvi-field">
+          Opacidad <span id="ndviOpacityVal">85%</span>
+          <input type="range" id="rngNdviOpacity" min="20" max="100" value="85">
+        </label>
+      </div>
+      <div id="ndviStatsPanel" class="ndvi-panel-stats" hidden>
+        <h3 id="ndviStatsNombre">—</h3>
+        <div id="ndviStatsBody"></div>
+      </div>
+      <h2>ANP de contexto (<span id="conteo">0</span>)</h2>
+      <p class="ndvi-hint">Fichas oficiales en <a href="https://anp.imbio.info" target="_blank" rel="noopener">SANPEA</a>.</p>
+      <ul class="lista-anp-visor" id="listaANP"></ul>
+    </div>
+    <div class="mapa-wrap">
+      <div id="mapa"></div>
+      <div id="ndviLegend" class="ndvi-legend" hidden></div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <p>Áreas prioritarias para la conservación · IMBIO · SSMAA · Catálogo POF 2025</p>
+  <p>Instituto Municipal de Biodiversidad y Protección Ambiental · Pabellón de Arteaga</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="js/config.js"></script>
+<script src="js/datos.js"></script>
+<script src="js/ndvi.js"></script>
+<script>
+let map, capaANP, capaAPC, ndviCtrl, LAYERS_BY_ID = {}, FEATURES_BY_ID = {};
+let allAnpFeatures = [];
+let selectedAnpId = null;
+let ndviYear = ANP_CONFIG.compareYears[ANP_CONFIG.compareYears.length - 1];
+let ndviOpacity = 0.85;
+
+function estiloResaltado() {
+  return { color: '#1b4332', weight: 3, fillColor: '#b08968', fillOpacity: 0.5 };
+}
+
+function popupANPConNdvi(props, statsBlock) {
+  const stats = statsBlock || '<div class="ndvi-stats-note">Calculando NDVI…</div>';
+  return `${popupANPHtml(props)}<br>${stats}`;
+}
+
+async function loadNdviForPolygon(id) {
+  const feature = FEATURES_BY_ID[id];
+  const layer = LAYERS_BY_ID[id];
+  if (!feature || !layer) return;
+  const props = feature.properties;
+  document.getElementById('ndviStatsBody').innerHTML = '<div class="ndvi-stats-note">Calculando NDVI…</div>';
+  document.getElementById('ndviStatsPanel').hidden = false;
+  document.getElementById('ndviStatsNombre').textContent = props.nombre;
+  try {
+    const stats = await fetchAnpNdviStats(feature, id);
+    document.getElementById('ndviStatsBody').innerHTML = stats?.error
+      ? `<div class="ndvi-stats-error">${stats.error}</div>`
+      : ndviStatsHtml(stats);
+    layer.setPopupContent(popupANPConNdvi(props, ndviStatsHtml(stats)));
+  } catch (err) {
+    const errStats = { error: err.message || String(err) };
+    document.getElementById('ndviStatsBody').innerHTML = ndviStatsHtml(errStats);
+    layer.setPopupContent(popupANPConNdvi(props, ndviStatsHtml(errStats)));
+  }
+}
+
+function updateNdviClip() {
+  if (!ndviCtrl) return;
+  if (selectedAnpId && FEATURES_BY_ID[selectedAnpId]) {
+    ndviCtrl.setFeature(FEATURES_BY_ID[selectedAnpId]);
+  } else {
+    ndviCtrl.setFeatures(allAnpFeatures);
+  }
+}
+
+function seleccionar(id) {
+  selectedAnpId = id;
+  updateNdviClip();
+  Object.entries(LAYERS_BY_ID).forEach(([lid, layer]) => {
+    layer.setStyle(lid === id ? estiloResaltado() : estiloANP());
+  });
+  document.querySelectorAll('.lista-anp-visor li').forEach(li => {
+    li.classList.toggle('activa', li.dataset.id === id);
+  });
+  const layer = LAYERS_BY_ID[id];
+  if (layer) {
+    map.fitBounds(layer.getBounds(), { maxZoom: 13 });
+    layer.openPopup();
+    loadNdviForPolygon(id);
+  }
+}
+
+function initNdviControls() {
+  const sel = document.getElementById('selNdviYear');
+  ANP_CONFIG.ndviYears.forEach((y) => {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y;
+    if (y === ndviYear) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  renderNdviLegend(document.getElementById('ndviLegend'), ndviYear);
+  document.getElementById('chkNdvi').addEventListener('change', (e) => {
+    ndviCtrl?.setVisible(e.target.checked);
+    setNdviLegendVisible(document.getElementById('ndviLegend'), e.target.checked);
+    ndviIdentify?.refreshCursor();
+  });
+  sel.addEventListener('change', () => {
+    ndviYear = Number(sel.value);
+    ndviCtrl?.setYear(ndviYear);
+    updateNdviLegendYear(document.getElementById('ndviLegend'), ndviYear);
+  });
+  document.getElementById('rngNdviOpacity').addEventListener('input', (e) => {
+    ndviOpacity = Number(e.target.value) / 100;
+    document.getElementById('ndviOpacityVal').textContent = `${e.target.value}%`;
+    ndviCtrl?.setOpacity(ndviOpacity);
+  });
+}
+
+let ndviIdentify = null;
+
+async function init() {
+  map = L.map('mapa', {
+    minZoom: 8,
+    maxBounds: [[19.8, -104.2], [24.0, -100.4]],
+    maxBoundsViscosity: 0.8
+  }).setView([21.88, -102.3], 9);
+  agregarCapasBase(map);
+  initNdviControls();
+
+  const [geojson, apcGeojson] = await Promise.all([cargarGeoJSON(), cargarAPC()]);
+  allAnpFeatures = geojson.features;
+  geojson.features.forEach((f) => { FEATURES_BY_ID[f.properties.id] = f; });
+
+  ndviCtrl = createClippedNdviController(map, { year: ndviYear, opacity: ndviOpacity, visible: false });
+  updateNdviClip();
+  ndviIdentify = bindNdviPointIdentify(map, {
+    getYear: () => ndviCtrl?.getYear?.() ?? ndviYear,
+    isEnabled: () => document.getElementById('chkNdvi')?.checked,
+  });
+  ndviIdentify.refreshCursor();
+
+  capaAPC = L.geoJSON(apcGeojson, {
+    style: estiloAPC,
+    onEachFeature: (feature, layer) => {
+      layer.bindPopup(popupAPCHtml(feature.properties));
+      layer.on('click', (e) => L.DomEvent.stopPropagation(e));
+    },
+  });
+  document.getElementById('chkApc').addEventListener('change', (e) => {
+    if (e.target.checked) capaAPC.addTo(map);
+    else map.removeLayer(capaAPC);
+  });
+
+  capaANP = L.geoJSON(geojson, {
+    style: estiloANP,
+    onEachFeature: (feature, layer) => {
+      const props = feature.properties;
+      layer.bindPopup(popupANPHtml(props));
+      layer.on('click', () => seleccionar(props.id));
+      LAYERS_BY_ID[props.id] = layer;
+    }
+  }).addTo(map);
+
+  map.fitBounds(capaANP.getBounds(), { padding: [20, 20] });
+
+  const ordenadas = [...geojson.features].sort((a, b) => a.properties.nombre.localeCompare(b.properties.nombre, 'es'));
+  document.getElementById('conteo').textContent = ordenadas.length;
+  const lista = document.getElementById('listaANP');
+  for (const feat of ordenadas) {
+    const p = feat.properties;
+    const li = document.createElement('li');
+    li.dataset.id = p.id;
+    li.innerHTML = `<strong>${p.nombre}</strong><br><span style="color:var(--texto-suave)">${formatoHectareas(p.hectareas)}</span>`;
+    li.addEventListener('click', () => seleccionar(p.id));
+    lista.appendChild(li);
+  }
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ficha APC · IMBIO Aguascalientes</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header site-header-imbio">
+  <div class="brand-group">
+    <span class="logo-ayto-wrap"><img class="logo-ayto" src="assets/img/logo_ayuntamiento.jpg" alt="IMBIO"></span>
+    <div>
+      <div class="brand"><span class="leaf">🌿</span> Áreas prioritarias para la conservación</div>
+      <div class="creditos-header">IMBIO · SSMAA · Catálogo POF 2025</div>
+    </div>
+  </div>
+  <nav class="site-nav">
+    <a href="index.html">Inicio</a>
+    <a href="visor.html">Visor de mapa</a>
+    <a href="apc.html">Fichas APC</a>
+    <a href="analisis.html">Análisis</a>
+  </nav>
+</header>
+
+<main id="contenido"><p>Cargando ficha...</p></main>
+
+<footer class="site-footer">
+  <p>Áreas prioritarias para la conservación · IMBIO · SSMAA · Catálogo POF 2025</p>
+  <p>Instituto Municipal de Biodiversidad y Protección Ambiental · Pabellón de Arteaga</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="js/config.js"></script>
+<script src="js/datos.js"></script>
+<script src="js/ndvi.js"></script>
+<script>
+function fmtNum(n, dec = 2) {
+  if (n == null || Number.isNaN(Number(n))) return '—';
+  return Number(n).toLocaleString('es-MX', { maximumFractionDigits: dec });
+}
+
+async function init() {
+  const id = new URLSearchParams(location.search).get('id');
+  const contenido = document.getElementById('contenido');
+  const [apcGeojson, meta] = await Promise.all([cargarAPC(), cargarAPCMeta()]);
+  const feature = apcGeojson.features.find((f) => f.properties.id === id);
+  const props = feature?.properties;
+
+  if (!props) {
+    contenido.innerHTML = '<p>No se encontró esta área prioritaria. <a href="apc.html">Volver al listado</a></p>';
+    return;
+  }
+
+  const veg = tituloVegetacion(props.tipo_vegetacion);
+  const estadoLabel = apcEstadoLabel(props.estado_conservacion);
+  document.title = `${veg} · Ficha APC · IMBIO`;
+
+  contenido.innerHTML = `
+    <a class="volver-link" href="apc.html">← Volver al listado APC</a>
+    <div class="ficha-header">
+      <span class="badge badge-apc">Área prioritaria para la conservación</span>
+      <span class="badge ${apcBadgeClass(props.estado_conservacion)}">${estadoLabel}</span>
+      <h1>${veg}</h1>
+      <div style="color:var(--texto-suave)">${props.id}</div>
+    </div>
+    <div class="ficha-grid">
+      <div class="ficha-mapa-wrap">
+        <div id="fichaMapa" class="ficha-mapa"></div>
+        <div id="fichaNdviLegend" class="ndvi-legend" hidden></div>
+      </div>
+      <div class="ficha-datos">
+        <dl>
+          <dt>Superficie</dt><dd>${formatoHectareas(props.hectareas)}</dd>
+          <dt>Tipo de vegetación</dt><dd>${veg}</dd>
+          <dt>Estado de conservación</dt><dd>${estadoLabel}</dd>
+          <dt>Biodiversidad aérea</dt><dd>${fmtNum(props.biodiversidad_aerea, 1)}</dd>
+          <dt>Biodiversidad subterránea</dt><dd>${fmtNum(props.biodiversidad_subterranea, 1)}</dd>
+          <dt>Carbono absorbido</dt><dd>${fmtNum(props.carbono_absorbido, 1)} t</dd>
+        </dl>
+        <div class="ndvi-map-controls">
+          <h3>Cobertura vegetal en el mapa</h3>
+          <label class="ndvi-toggle">
+            <input type="checkbox" id="chkFichaNdvi">
+            Mostrar capa NDVI recortada al polígono
+          </label>
+          <label class="ndvi-field">Año <select id="selFichaNdviYear"></select></label>
+          <p class="ndvi-hint">Con la capa activa, clic en el mapa para consultar NDVI.</p>
+        </div>
+      </div>
+    </div>
+    <div class="descripcion-box">
+      <h2>Cobertura vegetal (NDVI)</h2>
+      <div id="ndviFichaStats" class="ndvi-stats-note">Calculando NDVI 2016–2026…</div>
+      <p class="ndvi-stats-note"><a href="visor.html">Visor</a> · <a href="analisis.html">Análisis del catálogo</a></p>
+    </div>
+    <div class="descripcion-box">
+      <h2>Contexto metodológico</h2>
+      <p>${meta.nota} Fuente: ${meta.fuente}.</p>
+      <p>ANP decretadas: <a href="https://anp.imbio.info" target="_blank" rel="noopener">SANPEA (anp.imbio.info)</a>.</p>
+    </div>
+  `;
+
+  const map = L.map('fichaMapa', { scrollWheelZoom: false, minZoom: 8, maxBounds: [[19.8, -104.2], [24.0, -100.4]], maxBoundsViscosity: 0.8 });
+  agregarCapasBase(map, true);
+  const layer = L.geoJSON(feature, { style: estiloAPC }).addTo(map);
+  map.fitBounds(layer.getBounds(), { padding: [20, 20] });
+  requestAnimationFrame(() => map.invalidateSize());
+
+  const selYear = document.getElementById('selFichaNdviYear');
+  ANP_CONFIG.ndviYears.forEach((y) => {
+    const opt = document.createElement('option');
+    opt.value = y; opt.textContent = y;
+    if (y === ANP_CONFIG.compareYears[1]) opt.selected = true;
+    selYear.appendChild(opt);
+  });
+  const ndviLegendEl = document.getElementById('fichaNdviLegend');
+  renderNdviLegend(ndviLegendEl, ANP_CONFIG.compareYears[1]);
+  const ndviCtrl = createClippedNdviController(map, { year: ANP_CONFIG.compareYears[1], opacity: 0.85, visible: false });
+  ndviCtrl.setFeature(feature);
+  const ndviIdentify = bindNdviPointIdentify(map, {
+    getYear: () => ndviCtrl.getYear(),
+    isEnabled: () => document.getElementById('chkFichaNdvi').checked,
+  });
+  document.getElementById('chkFichaNdvi').addEventListener('change', (e) => {
+    ndviCtrl.setVisible(e.target.checked);
+    ndviLegendEl.hidden = !e.target.checked;
+    ndviIdentify.refreshCursor();
+  });
+  selYear.addEventListener('change', () => {
+    ndviCtrl.setYear(Number(selYear.value));
+    updateNdviLegendYear(ndviLegendEl, Number(selYear.value));
+  });
+  ndviIdentify.refreshCursor();
+  fetchAnpNdviStats(feature, props.id)
+    .then((stats) => { document.getElementById('ndviFichaStats').innerHTML = ndviStatsHtml(stats); })
+    .catch((err) => { document.getElementById('ndviFichaStats').innerHTML = `<div class="ndvi-stats-error">${err.message || err}</div>`; });
+}
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fichas APC · IMBIO Aguascalientes</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header site-header-imbio">
+  <div class="brand-group">
+    <span class="logo-ayto-wrap"><img class="logo-ayto" src="assets/img/logo_ayuntamiento.jpg" alt="IMBIO"></span>
+    <div>
+      <div class="brand"><span class="leaf">🌿</span> Áreas prioritarias para la conservación</div>
+      <div class="creditos-header">IMBIO · SSMAA · Catálogo POF 2025</div>
+    </div>
+  </div>
+  <nav class="site-nav">
+    <a href="index.html">Inicio</a>
+    <a href="visor.html">Visor de mapa</a>
+    <a href="apc.html" class="active">Fichas APC</a>
+    <a href="analisis.html">Análisis</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" style="padding-bottom:24px;">
+    <h1>Fichas por polígono APC</h1>
+    <p>739 polígonos · 60,956.61 ha · mapa, atributos ecológicos y NDVI 2016–2026 por polígono.</p>
+    <div class="stats-row" id="statsRow"></div>
+    <div class="cta-row">
+      <a href="visor.html" class="btn btn-primary">Abrir visor de mapa</a>
+      <a href="analisis.html" class="btn btn-outline">Ver análisis y gráficas</a>
+    </div>
+  </section>
+
+  <section id="listado">
+    <div class="filtros">
+      <input type="search" id="buscador" placeholder="Buscar por tipo de vegetación o ID…">
+      <select id="filtroEstado">
+        <option value="">Todos los estados</option>
+        <option value="PRIMARIO">Vegetación primaria</option>
+        <option value="SECUNDARIO">Vegetación secundaria</option>
+      </select>
+      <select id="filtroVegetacion">
+        <option value="">Todos los tipos</option>
+      </select>
+    </div>
+    <p id="conteoLista" class="ndvi-hint" style="margin:0 0 12px;"></p>
+    <div class="grid-fichas" id="gridApc"></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>Áreas prioritarias para la conservación · IMBIO · SSMAA · Catálogo POF 2025</p>
+  <p>Instituto Municipal de Biodiversidad y Protección Ambiental · Pabellón de Arteaga</p>
+</footer>
+
+<script src="js/datos.js"></script>
+<script>
+let TODAS = [];
+
+function render(lista) {
+  const grid = document.getElementById('gridApc');
+  document.getElementById('conteoLista').textContent =
+    `${lista.length.toLocaleString('es-MX')} polígono${lista.length === 1 ? '' : 's'} mostrado${lista.length === 1 ? '' : 's'}`;
+  if (lista.length === 0) {
+    grid.innerHTML = '<p style="color:var(--texto-suave)">No se encontraron polígonos APC con ese criterio.</p>';
+    return;
+  }
+  grid.innerHTML = lista.map((p) => {
+    const veg = tituloVegetacion(p.tipo_vegetacion);
+    return `<a href="ficha-apc.html?id=${p.id}" class="card-apc">
+      <span class="badge ${apcBadgeClass(p.estado_conservacion)}">${apcEstadoLabel(p.estado_conservacion)}</span>
+      <h3>${veg}</h3>
+      <div class="meta">${p.id}</div>
+      <div class="meta"><strong>${formatoHectareas(p.hectareas)}</strong></div>
+      <span class="ver-mas">Ver ficha completa →</span>
+    </a>`;
+  }).join('');
+}
+
+function aplicarFiltros() {
+  const q = document.getElementById('buscador').value.trim().toLowerCase();
+  const estado = document.getElementById('filtroEstado').value;
+  const vegetacion = document.getElementById('filtroVegetacion').value;
+  render(TODAS.filter((p) => {
+    const texto = `${p.tipo_vegetacion} ${p.id} ${p.nombre}`.toLowerCase();
+    return (!q || texto.includes(q)) && (!estado || p.estado_conservacion === estado) && (!vegetacion || p.tipo_vegetacion === vegetacion);
+  }));
+}
+
+async function init() {
+  const [geojson, meta] = await Promise.all([cargarAPC(), cargarAPCMeta()]);
+  TODAS = geojson.features.map((f) => f.properties);
+  TODAS.sort((a, b) => a.tipo_vegetacion.localeCompare(b.tipo_vegetacion, 'es') || a.id.localeCompare(b.id));
+  [...new Set(TODAS.map((p) => p.tipo_vegetacion))].sort((a, b) => a.localeCompare(b, 'es')).forEach((t) => {
+    const opt = document.createElement('option');
+    opt.value = t;
+    opt.textContent = tituloVegetacion(t);
+    document.getElementById('filtroVegetacion').appendChild(opt);
+  });
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card"><div class="num">${meta.totalPoligonos.toLocaleString('es-MX')}</div><div class="label">polígonos</div></div>
+    <div class="stat-card"><div class="num">${formatoHectareas(meta.totalHectareas)}</div><div class="label">superficie total</div></div>
+  `;
+  render(TODAS);
+  document.getElementById('buscador').addEventListener('input', aplicarFiltros);
+  document.getElementById('filtroEstado').addEventListener('change', aplicarFiltros);
+  document.getElementById('filtroVegetacion').addEventListener('change', aplicarFiltros);
+}
+init();
+</script>
+</body>
+</html>

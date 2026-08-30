@@ -1,0 +1,27 @@
+{
+  "titulo": "Áreas prioritarias para la conservación",
+  "fuente": "SSMAA · Catálogo APC 2025 · IMBIO",
+  "documentos": [
+    "APC_FINAL_FINAL.docx",
+    "POF_Catalogo_de_áreas_prioritarias_para_la_conservacion_2025.pdf"
+  ],
+  "totalPoligonos": 739,
+  "totalHectareas": 60956.61,
+  "tiposVegetacion": {
+    "MATORRAL CRASICAULE": 19874.74,
+    "BOSQUE DE ENCINO": 13358.9,
+    "PASTIZAL NATURAL": 9561.9,
+    "SELVA BAJA CADUCIFOLIA": 8562.87,
+    "BOSQUE DE MEZQUITE": 5715.09,
+    "BOSQUE DE GALERIA": 2027.24,
+    "MATORRAL DESERTICO MICROFILO": 1701.11,
+    "BOSQUE DE JUNIPERO": 105.29,
+    "TULAR": 46.35,
+    "BOSQUE DE PINO-ENCINO": 3.11
+  },
+  "estadosConservacion": {
+    "PRIMARIO": 21112.1,
+    "SECUNDARIO": 39844.5
+  },
+  "nota": "Polígonos excluyen ANP decretadas y UGA de protección según metodología SSMAA/POF 2025."
+}
