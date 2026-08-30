@@ -518,6 +518,15 @@ main {
 
 .descripcion-box h2 { margin-top: 0; color: var(--verde-oscuro); font-size: 1.1rem; }
 
+.descargas-home {
+  margin-top: 8px;
+}
+
+.descargas-home p {
+  color: var(--texto-suave);
+  margin: 0 0 4px;
+}
+
 .docs-box {
   margin-top: 18px;
   display: flex;
