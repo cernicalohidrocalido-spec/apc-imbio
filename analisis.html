@@ -52,6 +52,20 @@
     <div class="chart-box"><h2>Primario vs secundario</h2><canvas id="chartEstado"></canvas></div>
   </div>
 
+  <section id="ndvi-global" class="ndvi-comparacion-section">
+    <h2 style="color:var(--verde-oscuro); font-size:1.35rem; margin-bottom:8px;">Cobertura vegetal global del catálogo APC · NDVI 2016–2026</h2>
+    <p class="analisis-intro" style="margin-bottom:12px;">
+      NDVI medio anual del conjunto de áreas prioritarias (unión de los 739 polígonos del catálogo).
+      Composición mediana anual Sentinel-2 · IMBIO · escala 60 m.
+      <a href="visor.html">Abrir visor con capa NDVI</a>
+    </p>
+    <p id="ndviGlobalResumen" class="ndvi-load-status">Cargando serie NDVI global…</p>
+    <div class="chart-box" style="max-width:920px; margin:0 auto 8px;">
+      <canvas id="chartNdviGlobal" height="120"></canvas>
+    </div>
+    <p class="nota-tabla" id="ndviGlobalNota" style="padding-left:0;">—</p>
+  </section>
+
   <div class="chart-box">
     <h2>ANP decretadas + áreas prioritarias para la conservación</h2>
     <canvas id="chartCombinada" height="110"></canvas>
@@ -64,6 +78,8 @@
   <p>Instituto Municipal de Biodiversidad y Protección Ambiental · Pabellón de Arteaga</p>
 </footer>
 
+<script src="js/config.js"></script>
+<script src="js/ndvi.js"></script>
 <script src="js/datos.js"></script>
 <script>
 const TOTAL_NET_ANP = 152422.50;
@@ -71,6 +87,77 @@ const PCT_ESTADO_ANP = 27.11;
 
 function formatoHa(n) {
   return n.toLocaleString('es-MX', { maximumFractionDigits: 2 }) + ' ha';
+}
+
+function fmtPct(n) {
+  if (n == null || Number.isNaN(Number(n))) return '—';
+  const sign = n >= 0 ? '+' : '';
+  return `${sign}${Number(n).toFixed(1)}%`;
+}
+
+async function renderNdviGlobal() {
+  const resumenEl = document.getElementById('ndviGlobalResumen');
+  const notaEl = document.getElementById('ndviGlobalNota');
+  try {
+    const data = await fetch('data/apc_ndvi_global.json').then((r) => {
+      if (!r.ok) throw new Error('No se encontró la serie NDVI global');
+      return r.json();
+    });
+    const years = (data.years || Object.keys(data.ndviByYear).map(Number)).sort((a, b) => a - b);
+    const values = years.map((y) => data.ndviByYear[String(y)]);
+    const r = data.resumen || {};
+    const trend = r.changeAbsolute >= 0 ? 'aumento' : 'disminución';
+    resumenEl.innerHTML = `
+      <strong>Resumen ${r.yearStart}–${r.yearEnd}:</strong>
+      el NDVI medio del catálogo pasó de <strong>${fmtNdvi(r.ndviStart)}</strong> (${r.yearStart})
+      a <strong>${fmtNdvi(r.ndviEnd)}</strong> (${r.yearEnd})
+      (<span style="color:${r.changeAbsolute >= 0 ? '#15803d' : '#dc2626'}">${fmtPct(r.changePercent)}</span>, ${trend} neto).
+      Máximo en <strong>${r.maxYear}</strong> (${fmtNdvi(r.maxNdvi)});
+      mínimo en <strong>${r.minYear}</strong> (${fmtNdvi(r.minNdvi)}).
+      Superficie analizada: <strong>${formatoHa(data.areaHectareas || 60956.61)}</strong>
+      (${(data.poligonos || 739).toLocaleString('es-MX')} polígonos).`;
+    resumenEl.classList.remove('ndvi-load-status');
+    notaEl.textContent =
+      `${data.scope || 'Catálogo APC'}. Fuente: api-cobertura.imbio.info · actualizado ${new Date(data.generatedAt || Date.now()).toLocaleDateString('es-MX')}.`;
+
+    new Chart(document.getElementById('chartNdviGlobal'), {
+      type: 'line',
+      data: {
+        labels: years.map(String),
+        datasets: [{
+          label: 'NDVI medio',
+          data: values,
+          borderColor: '#3A5A40',
+          backgroundColor: 'rgba(58, 90, 64, 0.12)',
+          fill: true,
+          tension: 0.25,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+        }],
+      },
+      options: {
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `NDVI ${ctx.label}: ${fmtNdvi(ctx.parsed.y)}`,
+            },
+          },
+        },
+        scales: {
+          y: {
+            min: 0,
+            max: 0.45,
+            title: { display: true, text: 'NDVI medio' },
+          },
+          x: { title: { display: true, text: 'Año' } },
+        },
+      },
+    });
+  } catch (err) {
+    resumenEl.innerHTML = `<span class="ndvi-stats-error">${err.message || err}</span>`;
+    notaEl.textContent = 'Ejecute scripts/compute_apc_ndvi_global.py para regenerar la serie.';
+  }
 }
 
 async function init() {
@@ -120,6 +207,8 @@ async function init() {
     },
     options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Hectáreas' } } } },
   });
+
+  await renderNdviGlobal();
 }
 init();
 </script>
