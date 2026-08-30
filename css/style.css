@@ -1,14 +1,21 @@
 :root {
+  --imbio-azul: #002A5C;
+  --imbio-azul-claro: #0B3D75;
+  --imbio-verde: #3A5A40;
+  --imbio-verde-claro: #2f8f5b;
+  --imbio-tierra: #A67C52;
+  --imbio-azul-suave: #dbe8f5;
+  --imbio-verde-suave: #e8efe9;
   --verde-oscuro: #1b4332;
   --verde: #2d6a4f;
   --verde-claro: #52b788;
-  --verde-fondo: #f1f8f4;
-  --tierra: #b08968;
-  --texto: #22333b;
-  --texto-suave: #5c6b66;
+  --verde-fondo: #f4f6f8;
+  --tierra: #A67C52;
+  --texto: #1f2a24;
+  --texto-suave: #3d4a43;
   --borde: #d8e5dd;
   --blanco: #ffffff;
-  --sombra: 0 2px 10px rgba(27, 67, 50, 0.08);
+  --sombra: 0 2px 10px rgba(0, 42, 92, 0.08);
 }
 
 * { box-sizing: border-box; }
@@ -36,7 +43,7 @@ header.site-header {
 }
 
 header.site-header.site-header-imbio {
-  background: linear-gradient(120deg, #4c1d95, #7c3aed);
+  background: linear-gradient(120deg, var(--imbio-azul), var(--imbio-azul-claro) 55%, var(--imbio-verde));
 }
 
 header.site-header .brand-group {
@@ -254,9 +261,9 @@ main {
 .badge-estatal { background: #fef3e2; color: #b45309; }
 .badge-municipal { background: #eafaf0; color: #15803d; }
 .badge-todo { background: #f1f1f1; color: #6b7280; }
-.badge-apc-primario { background: #fef3c7; color: #b45309; }
-.badge-apc-secundario { background: #ede9fe; color: #7c3aed; }
-.badge-apc { background: #f3e8ff; color: #6b21a8; }
+.badge-apc-primario { background: var(--imbio-verde-suave); color: var(--imbio-verde); }
+.badge-apc-secundario { background: var(--imbio-azul-suave); color: var(--imbio-azul-claro); }
+.badge-apc { background: var(--imbio-azul-suave); color: var(--imbio-azul); }
 
 .card-apc {
   display: block;
@@ -757,13 +764,13 @@ table.tabla-anp tfoot td {
 }
 
 .apc-leyenda-item.apc-primario::before {
-  border-color: #b45309;
-  background: rgba(251, 191, 36, 0.45);
+  border-color: var(--imbio-verde);
+  background: rgba(47, 143, 91, 0.45);
 }
 
 .apc-leyenda-item.apc-secundario::before {
-  border-color: #7c3aed;
-  background: rgba(196, 181, 253, 0.45);
+  border-color: var(--imbio-azul-claro);
+  background: rgba(174, 203, 230, 0.55);
 }
 
 .ndvi-controls {

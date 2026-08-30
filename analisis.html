@@ -95,7 +95,7 @@ async function init() {
     type: 'bar',
     data: {
       labels: tipos.map(([t]) => tituloVegetacion(t)),
-      datasets: [{ label: 'Hectáreas', data: tipos.map(([, ha]) => ha), backgroundColor: '#7c3aed' }],
+      datasets: [{ label: 'Hectáreas', data: tipos.map(([, ha]) => ha), backgroundColor: '#3A5A40' }],
     },
     options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Hectáreas' } } } },
   });
@@ -106,7 +106,7 @@ async function init() {
       labels: ['Primario', 'Secundario'],
       datasets: [{
         data: [meta.estadosConservacion.PRIMARIO, meta.estadosConservacion.SECUNDARIO],
-        backgroundColor: ['#fbbf24', '#c4b5fd'],
+        backgroundColor: ['#2f8f5b', '#aecbe6'],
       }],
     },
   });
@@ -115,7 +115,7 @@ async function init() {
     type: 'bar',
     data: {
       labels: [['ANP decretadas', '(territorio real)'], ['ANP + APC']],
-      datasets: [{ data: [TOTAL_NET_ANP, totalCombinada], backgroundColor: ['#2d6a4f', '#7c3aed'] }],
+      datasets: [{ data: [TOTAL_NET_ANP, totalCombinada], backgroundColor: ['#2d6a4f', '#0B3D75'] }],
     },
     options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Hectáreas' } } } },
   });

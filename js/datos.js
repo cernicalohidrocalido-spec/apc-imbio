@@ -27,11 +27,11 @@ function estiloANP() {
 function estiloAPC(feature) {
   const primario = feature?.properties?.estado_conservacion === 'PRIMARIO';
   return {
-    color: primario ? '#b45309' : '#7c3aed',
+    color: primario ? '#3A5A40' : '#0B3D75',
     weight: 2,
     dashArray: '6 4',
-    fillColor: primario ? '#fbbf24' : '#c4b5fd',
-    fillOpacity: 0.35,
+    fillColor: primario ? '#2f8f5b' : '#aecbe6',
+    fillOpacity: primario ? 0.38 : 0.32,
   };
 }
 
