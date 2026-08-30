@@ -77,10 +77,11 @@ async function init() {
           <dt>Superficie</dt><dd>${formatoHectareas(props.hectareas)}</dd>
           <dt>Tipo de vegetación</dt><dd>${veg}</dd>
           <dt>Estado de conservación</dt><dd>${estadoLabel}</dd>
-          <dt>Biodiversidad aérea</dt><dd>${fmtNum(props.biodiversidad_aerea, 1)}</dd>
-          <dt>Biodiversidad subterránea</dt><dd>${fmtNum(props.biodiversidad_subterranea, 1)}</dd>
-          <dt>Carbono absorbido</dt><dd>${fmtNum(props.carbono_absorbido, 1)} t</dd>
+          <dt>Biomasa aérea</dt><dd>${fmtNum(biomasaAerea(props), 1)} t C</dd>
+          <dt>Biomasa subterránea</dt><dd>${fmtNum(biomasaSubterranea(props), 1)} t C</dd>
+          <dt>Carbono absorbido</dt><dd>${fmtNum(props.carbono_absorbido, 1)} t CO₂e</dd>
         </dl>
+        <p class="ndvi-hint" style="margin-top:12px;">Estimación según metodología INECC (2022): carbono en vegetación aérea y en raíces del polígono. El CO₂e se obtiene como (biomasa aérea + biomasa subterránea) × 44/12.</p>
         <div class="ndvi-map-controls">
           <h3>Cobertura vegetal en el mapa</h3>
           <label class="ndvi-toggle">
@@ -100,6 +101,12 @@ async function init() {
       <h2>Cobertura vegetal (NDVI)</h2>
       <div id="ndviFichaStats" class="ndvi-stats-note">Calculando NDVI 2016–2026…</div>
       <p class="ndvi-stats-note"><a href="visor.html">Visor</a> · <a href="analisis.html">Análisis del catálogo APC</a></p>
+    </div>
+    <div class="descripcion-box">
+      <h2>Biomasa y captura de carbono</h2>
+      <p>Los valores de <strong>biomasa aérea</strong> y <strong>biomasa subterránea</strong> expresan el carbono almacenado en la vegetación sobre el suelo y en raíces u órganos subterráneos del polígono (toneladas de carbono, t C). Se calculan a partir de factores de absorción por tipo de vegetación y estado de conservación, conforme a la metodología del INECC para la captura de carbono en áreas naturales protegidas.</p>
+      <p>El <strong>carbono absorbido</strong> corresponde al equivalente en dióxido de carbono: (biomasa aérea + biomasa subterránea) × 44/12, en toneladas de CO₂e. No miden diversidad biológica ni número de especies.</p>
+      <p class="ndvi-hint">Referencia: INECC. Metodología para el cálculo de la captura de carbono en Áreas Naturales Protegidas. 2022.</p>
     </div>
     <div class="descripcion-box">
       <h2>Contexto metodológico</h2>

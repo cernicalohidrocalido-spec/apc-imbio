@@ -62,8 +62,8 @@ def main() -> None:
 
         gdf["tipo_vegetacion"] = attrs["tipo_vgt_1"].fillna(gdf["Name"])
         gdf["hectareas"] = attrs["hectareas"]
-        gdf["biodiversidad_aerea"] = attrs["bio_aer_1"]
-        gdf["biodiversidad_subterranea"] = attrs["bio_sub_1"]
+        gdf["biomasa_aerea"] = attrs["bio_aer_1"]
+        gdf["biomasa_subterranea"] = attrs["bio_sub_1"]
         gdf["carbono_absorbido"] = attrs["abs_car_1"]
         gdf["estado_conservacion"] = attrs["estado_c_1"]
         gdf["geometry"] = gdf.geometry.simplify(0.00005, preserve_topology=True)
@@ -79,8 +79,8 @@ def main() -> None:
             "nombre",
             "tipo_vegetacion",
             "hectareas",
-            "biodiversidad_aerea",
-            "biodiversidad_subterranea",
+            "biomasa_aerea",
+            "biomasa_subterranea",
             "carbono_absorbido",
             "estado_conservacion",
             "geometry",

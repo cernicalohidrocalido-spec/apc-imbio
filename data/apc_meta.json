@@ -23,5 +23,9 @@
     "PRIMARIO": 21112.1,
     "SECUNDARIO": 39844.5
   },
-  "nota": "Polígonos excluyen ANP decretadas y UGA de protección según metodología de la Secretaría de Sustentabilidad, Medio Ambiente y Agua (SSMAA) conforme a la Ley de Protección Ambiental para el Estado de Aguascalientes."
+  "nota": "Polígonos excluyen ANP decretadas y UGA de protección según metodología de la Secretaría de Sustentabilidad, Medio Ambiente y Agua (SSMAA) conforme a la Ley de Protección Ambiental para el Estado de Aguascalientes.",
+  "biomasa": {
+    "descripcion": "Biomasa aérea y subterránea: carbono en vegetación y raíces (t C), según factores INECC (2022). Carbono absorbido = (aérea + subterránea) × 44/12 (t CO₂e).",
+    "referencia": "INECC. Metodología para el cálculo de la captura de carbono en Áreas Naturales Protegidas. 2022."
+  }
 }

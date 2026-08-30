@@ -48,15 +48,25 @@ function apcEstadoLabel(estado) {
   return estado === 'PRIMARIO' ? 'Vegetación primaria' : 'Vegetación secundaria';
 }
 
+function biomasaAerea(props) {
+  return props?.biomasa_aerea ?? props?.biodiversidad_aerea;
+}
+
+function biomasaSubterranea(props) {
+  return props?.biomasa_subterranea ?? props?.biodiversidad_subterranea;
+}
+
 function popupAPCHtml(props, statsBlock) {
   const veg = tituloVegetacion(props.tipo_vegetacion);
   const estado = props.estado_conservacion === 'PRIMARIO' ? 'Primario' : 'Secundario';
   const stats = statsBlock ? `<br>${statsBlock}` : '';
+  const ba = biomasaAerea(props);
+  const bs = biomasaSubterranea(props);
   return `<b>Catálogo APC · Área prioritaria</b><br>
     <span style="color:var(--texto-suave);font-size:0.9em">${veg} · ${estado}</span><br>
     ${formatoHectareas(props.hectareas)}<br>
-    <small>Biodiv. aérea: ${props.biodiversidad_aerea?.toFixed(1) ?? '—'} · Subterránea: ${props.biodiversidad_subterranea?.toFixed(1) ?? '—'}<br>
-    Carbono absorbido: ${props.carbono_absorbido?.toFixed(1) ?? '—'} t</small>${stats}
+    <small>Biomasa aérea: ${ba?.toFixed(1) ?? '—'} t C · Subterránea: ${bs?.toFixed(1) ?? '—'} t C<br>
+    Carbono absorbido: ${props.carbono_absorbido?.toFixed(1) ?? '—'} t CO₂e</small>${stats}
     <a class="popup-link" href="ficha-apc.html?id=${props.id}">Ver ficha completa →</a>`;
 }
 
