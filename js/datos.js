@@ -20,6 +20,16 @@ async function cargarAPCMeta() {
   return res.json();
 }
 
+async function cargarMunicipios() {
+  const res = await fetch('data/municipios.geojson');
+  return res.json();
+}
+
+function listaMunicipiosApc(features) {
+  return [...new Set(features.map((f) => f.properties.municipio).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, 'es'));
+}
+
 function estiloANP() {
   return { color: '#2d6a4f', weight: 2, fillColor: '#52b788', fillOpacity: 0.25 };
 }
@@ -63,7 +73,7 @@ function popupAPCHtml(props, statsBlock) {
   const ba = biomasaAerea(props);
   const bs = biomasaSubterranea(props);
   return `<b>Catálogo APC · Área prioritaria</b><br>
-    <span style="color:var(--texto-suave);font-size:0.9em">${veg} · ${estado}</span><br>
+    <span style="color:var(--texto-suave);font-size:0.9em">${veg} · ${estado}${props.municipio ? ` · ${props.municipio}` : ''}</span><br>
     ${formatoHectareas(props.hectareas)}<br>
     <small>Biomasa aérea: ${ba?.toFixed(1) ?? '—'} t C · Subterránea: ${bs?.toFixed(1) ?? '—'} t C<br>
     Carbono absorbido: ${props.carbono_absorbido?.toFixed(1) ?? '—'} t CO₂e</small>${stats}

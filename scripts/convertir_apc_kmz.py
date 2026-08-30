@@ -87,6 +87,12 @@ def main() -> None:
         ]
         gdf[cols].to_file(OUT_GEOJSON, driver="GeoJSON")
 
+    assign = ROOT / "scripts" / "asignar_municipios_apc.py"
+    if assign.exists():
+        import subprocess
+        import sys
+        subprocess.run([sys.executable, str(assign)], check=True)
+
     total_ha = round(float(gdf["hectareas"].sum()), 2)
     meta = {
         "titulo": "Catálogo de Áreas Prioritarias para la Conservación del Estado de Aguascalientes",

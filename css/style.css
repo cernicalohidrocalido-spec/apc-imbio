@@ -792,6 +792,20 @@ table.tabla-anp tfoot td {
   background: rgba(174, 203, 230, 0.55);
 }
 
+.apc-municipio-resumen {
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+  margin: 8px 0 10px;
+  line-height: 1.45;
+}
+
+.apc-municipio-resumen strong { color: var(--verde-oscuro); }
+
+.panel-lateral .ndvi-field select {
+  width: 100%;
+  margin-top: 4px;
+}
+
 .ndvi-controls {
   border-bottom: 1px solid var(--borde);
   padding-bottom: 14px;

@@ -36,6 +36,17 @@
           <input type="checkbox" id="chkApc">
           Mostrar polígonos APC
         </label>
+        <label class="ndvi-field">
+          Municipio
+          <select id="selMunicipio">
+            <option value="">Todos los municipios</option>
+          </select>
+        </label>
+        <p id="apcMunicipioResumen" class="apc-municipio-resumen">739 polígonos · 60,956.61 ha en todo el estado.</p>
+        <label class="ndvi-toggle">
+          <input type="checkbox" id="chkLimiteMunicipio">
+          Mostrar límite municipal
+        </label>
         <p class="ndvi-hint">739 polígonos · 60,956.61 ha · Catálogo de Áreas Prioritarias para la Conservación del Estado de Aguascalientes. <a href="apc.html">Ver fichas →</a></p>
         <div class="apc-leyenda">
           <span class="apc-leyenda-item apc-primario">Primario</span>
@@ -83,11 +94,96 @@
 <script src="js/datos.js"></script>
 <script src="js/ndvi.js"></script>
 <script>
-let map, capaANP, capaAPC, ndviCtrl, LAYERS_BY_ID = {}, FEATURES_BY_ID = {};
+let map, capaANP, capaAPC, capaLimiteMunicipio, ndviCtrl, LAYERS_BY_ID = {}, FEATURES_BY_ID = {};
 let allAnpFeatures = [];
+let allApcFeatures = [];
+let municipiosGeojson = null;
+let selectedMunicipio = '';
 let selectedAnpId = null;
 let ndviYear = ANP_CONFIG.compareYears[ANP_CONFIG.compareYears.length - 1];
 let ndviOpacity = 0.85;
+
+function apcFeaturesFiltradas() {
+  if (!selectedMunicipio) return allApcFeatures;
+  return allApcFeatures.filter((f) => f.properties.municipio === selectedMunicipio);
+}
+
+function resumenApcFiltrado(features) {
+  const totalHa = features.reduce((sum, f) => sum + (Number(f.properties.hectareas) || 0), 0);
+  return {
+    count: features.length,
+    ha: totalHa,
+  };
+}
+
+function actualizarResumenMunicipio() {
+  const feats = apcFeaturesFiltradas();
+  const { count, ha } = resumenApcFiltrado(feats);
+  const el = document.getElementById('apcMunicipioResumen');
+  if (!selectedMunicipio) {
+    el.innerHTML = `<strong>${count.toLocaleString('es-MX')} polígonos</strong> · ${formatoHectareas(ha)} en todo el estado.`;
+    return;
+  }
+  el.innerHTML = `<strong>${selectedMunicipio}:</strong> ${count.toLocaleString('es-MX')} polígono${count === 1 ? '' : 's'} · ${formatoHectareas(ha)}.`;
+}
+
+function estiloLimiteMunicipio() {
+  return { color: '#475569', weight: 2, dashArray: '8 5', fillOpacity: 0, fill: false };
+}
+
+function mostrarLimiteMunicipio() {
+  if (capaLimiteMunicipio) {
+    map.removeLayer(capaLimiteMunicipio);
+    capaLimiteMunicipio = null;
+  }
+  const mostrar = document.getElementById('chkLimiteMunicipio').checked;
+  if (!mostrar || !municipiosGeojson) return;
+  const feats = selectedMunicipio
+    ? municipiosGeojson.features.filter((f) => f.properties.NOM_MUNIC === selectedMunicipio)
+    : municipiosGeojson.features;
+  if (!feats.length) return;
+  capaLimiteMunicipio = L.geoJSON({ type: 'FeatureCollection', features: feats }, {
+    style: estiloLimiteMunicipio,
+    interactive: false,
+  }).addTo(map);
+}
+
+function reconstruirCapaApc() {
+  if (capaAPC) map.removeLayer(capaAPC);
+  const features = apcFeaturesFiltradas();
+  capaAPC = L.geoJSON({ type: 'FeatureCollection', features }, {
+    style: estiloAPC,
+    onEachFeature: (feature, layer) => {
+      layer.bindPopup(popupAPCHtml(feature.properties));
+      layer.on('click', (e) => L.DomEvent.stopPropagation(e));
+    },
+  });
+  actualizarResumenMunicipio();
+  if (document.getElementById('chkApc').checked) capaAPC.addTo(map);
+  if (features.length && selectedMunicipio) {
+    map.fitBounds(capaAPC.getBounds(), { padding: [24, 24], maxZoom: 12 });
+  }
+  mostrarLimiteMunicipio();
+}
+
+function initFiltroMunicipio() {
+  const sel = document.getElementById('selMunicipio');
+  listaMunicipiosApc(allApcFeatures).forEach((nombre) => {
+    const opt = document.createElement('option');
+    opt.value = nombre;
+    opt.textContent = nombre;
+    sel.appendChild(opt);
+  });
+  sel.addEventListener('change', () => {
+    selectedMunicipio = sel.value;
+    if (selectedMunicipio) {
+      document.getElementById('chkApc').checked = true;
+      document.getElementById('chkLimiteMunicipio').checked = true;
+    }
+    reconstruirCapaApc();
+  });
+  document.getElementById('chkLimiteMunicipio').addEventListener('change', mostrarLimiteMunicipio);
+}
 
 function estiloResaltado() {
   return { color: '#1b4332', weight: 3, fillColor: '#b08968', fillOpacity: 0.5 };
@@ -183,7 +279,9 @@ async function init() {
   agregarCapasBase(map);
   initNdviControls();
 
-  const [geojson, apcGeojson] = await Promise.all([cargarGeoJSON(), cargarAPC()]);
+  const [geojson, apcGeojson, municipios] = await Promise.all([cargarGeoJSON(), cargarAPC(), cargarMunicipios()]);
+  allApcFeatures = apcGeojson.features;
+  municipiosGeojson = municipios;
   allAnpFeatures = geojson.features;
   geojson.features.forEach((f) => { FEATURES_BY_ID[f.properties.id] = f; });
 
@@ -195,13 +293,15 @@ async function init() {
   });
   ndviIdentify.refreshCursor();
 
-  capaAPC = L.geoJSON(apcGeojson, {
+  capaAPC = L.geoJSON({ type: 'FeatureCollection', features: allApcFeatures }, {
     style: estiloAPC,
     onEachFeature: (feature, layer) => {
       layer.bindPopup(popupAPCHtml(feature.properties));
       layer.on('click', (e) => L.DomEvent.stopPropagation(e));
     },
   });
+  initFiltroMunicipio();
+  actualizarResumenMunicipio();
   document.getElementById('chkApc').addEventListener('change', (e) => {
     if (e.target.checked) capaAPC.addTo(map);
     else map.removeLayer(capaAPC);
