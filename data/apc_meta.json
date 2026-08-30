@@ -1,6 +1,6 @@
 {
-  "titulo": "Áreas prioritarias para la conservación",
-  "fuente": "SSMAA · Catálogo APC 2025 · IMBIO",
+  "titulo": "Catálogo de Áreas Prioritarias para la Conservación del Estado de Aguascalientes",
+  "fuente": "Secretaría de Sustentabilidad, Medio Ambiente y Agua (SSMAA) · Ley de Protección Ambiental para el Estado de Aguascalientes · IMBIO",
   "documentos": [
     "APC_FINAL_FINAL.docx",
     "POF_Catalogo_de_áreas_prioritarias_para_la_conservacion_2025.pdf"
@@ -23,5 +23,5 @@
     "PRIMARIO": 21112.1,
     "SECUNDARIO": 39844.5
   },
-  "nota": "Polígonos excluyen ANP decretadas y UGA de protección según metodología SSMAA/POF 2025."
+  "nota": "Polígonos excluyen ANP decretadas y UGA de protección según metodología de la Secretaría de Sustentabilidad, Medio Ambiente y Agua (SSMAA) conforme a la Ley de Protección Ambiental para el Estado de Aguascalientes."
 }

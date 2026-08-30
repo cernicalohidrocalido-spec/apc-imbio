@@ -89,8 +89,8 @@ def main() -> None:
 
     total_ha = round(float(gdf["hectareas"].sum()), 2)
     meta = {
-        "titulo": "Áreas prioritarias para la conservación",
-        "fuente": "SSMAA · Catálogo APC 2025 · IMBIO",
+        "titulo": "Catálogo de Áreas Prioritarias para la Conservación del Estado de Aguascalientes",
+        "fuente": "Secretaría de Sustentabilidad, Medio Ambiente y Agua (SSMAA) · Ley de Protección Ambiental para el Estado de Aguascalientes · IMBIO",
         "documentos": [
             "APC_FINAL_FINAL.docx",
             "POF_Catalogo_de_áreas_prioritarias_para_la_conservacion_2025.pdf",
@@ -106,7 +106,7 @@ def main() -> None:
         .sum()
         .round(2)
         .to_dict(),
-        "nota": "Polígonos excluyen ANP decretadas y UGA de protección según metodología SSMAA/POF 2025.",
+        "nota": "Polígonos excluyen ANP decretadas y UGA de protección según metodología de la Secretaría de Sustentabilidad, Medio Ambiente y Agua (SSMAA) conforme a la Ley de Protección Ambiental para el Estado de Aguascalientes.",
     }
     OUT_META.write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"OK {OUT_GEOJSON} ({OUT_GEOJSON.stat().st_size / 1024 / 1024:.1f} MB, {len(gdf)} polígonos)")

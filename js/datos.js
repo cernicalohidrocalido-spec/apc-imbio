@@ -52,7 +52,7 @@ function popupAPCHtml(props, statsBlock) {
   const veg = tituloVegetacion(props.tipo_vegetacion);
   const estado = props.estado_conservacion === 'PRIMARIO' ? 'Primario' : 'Secundario';
   const stats = statsBlock ? `<br>${statsBlock}` : '';
-  return `<b>Área prioritaria para la conservación</b><br>
+  return `<b>Catálogo APC · Área prioritaria</b><br>
     <span style="color:var(--texto-suave);font-size:0.9em">${veg} · ${estado}</span><br>
     ${formatoHectareas(props.hectareas)}<br>
     <small>Biodiv. aérea: ${props.biodiversidad_aerea?.toFixed(1) ?? '—'} · Subterránea: ${props.biodiversidad_subterranea?.toFixed(1) ?? '—'}<br>
