@@ -571,6 +571,17 @@ footer.site-footer p {
   margin: 4px 0;
 }
 
+.visit-counter {
+  margin: 0.35rem 0 0;
+  font-size: 0.72rem;
+  color: var(--texto-suave);
+  font-variant-numeric: tabular-nums;
+}
+
+.visit-counter[hidden] {
+  display: none;
+}
+
 .volver-link {
   display: inline-block;
   margin-bottom: 14px;

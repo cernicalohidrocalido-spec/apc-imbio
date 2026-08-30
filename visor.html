@@ -94,6 +94,7 @@
 <footer class="site-footer">
   <p>Catálogo de Áreas Prioritarias para la Conservación del Estado de Aguascalientes · IMBIO · SSMAA</p>
   <p>Instituto Municipal de Biodiversidad y Protección Ambiental · Pabellón de Arteaga</p>
+  <p id="visit-counter" class="visit-counter" hidden></p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -168,7 +169,7 @@ function initDescargasMunicipio() {
       alert(err.message || 'No se pudo generar el Shapefile.');
     } finally {
       btn.disabled = false;
-      btn.textContent = 'Shapefile (SHP)';
+      btn.textContent = 'SHP';
     }
   });
 }
@@ -395,5 +396,13 @@ async function init() {
 
 init();
 </script>
+<script>
+window.IMBIO_VISIT_COUNTER = {
+  apiUrl: "https://imbio-visits.cernicalo-hidrocalido.workers.dev",
+  page: "apc",
+  sessionKey: "imbio_visit_apc"
+};
+</script>
+<script src="https://imbio.info/visit-counter.js" defer></script>
 </body>
 </html>
