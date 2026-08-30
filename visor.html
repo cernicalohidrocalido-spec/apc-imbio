@@ -43,6 +43,13 @@
           </select>
         </label>
         <p id="apcMunicipioResumen" class="apc-municipio-resumen">739 polígonos · 60,956.61 ha en todo el estado.</p>
+        <div id="apcDescargasMunicipio" class="apc-descargas-municipio" hidden>
+          <p class="ndvi-hint" style="margin-bottom:6px;">Descargar corte municipal:</p>
+          <div class="apc-descargas-row">
+            <button type="button" id="btnDescargaKmz" class="btn btn-outline btn-descarga">KMZ</button>
+            <button type="button" id="btnDescargaShp" class="btn btn-outline btn-descarga">Shapefile (SHP)</button>
+          </div>
+        </div>
         <label class="ndvi-toggle">
           <input type="checkbox" id="chkLimiteMunicipio">
           Mostrar límite municipal
@@ -89,9 +96,12 @@
   <p>Instituto Municipal de Biodiversidad y Protección Ambiental · Pabellón de Arteaga</p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://unpkg.com/shp-write@0.3.2/shpwrite.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="js/config.js"></script>
 <script src="js/datos.js"></script>
+<script src="js/export-municipio.js"></script>
 <script src="js/ndvi.js"></script>
 <script>
 let map, capaANP, capaAPC, capaLimiteMunicipio, ndviCtrl, LAYERS_BY_ID = {}, FEATURES_BY_ID = {};
@@ -120,11 +130,47 @@ function actualizarResumenMunicipio() {
   const feats = apcFeaturesFiltradas();
   const { count, ha } = resumenApcFiltrado(feats);
   const el = document.getElementById('apcMunicipioResumen');
+  const descargas = document.getElementById('apcDescargasMunicipio');
   if (!selectedMunicipio) {
     el.innerHTML = `<strong>${count.toLocaleString('es-MX')} polígonos</strong> · ${formatoHectareas(ha)} en todo el estado.`;
+    if (descargas) descargas.hidden = true;
     return;
   }
   el.innerHTML = `<strong>${selectedMunicipio}:</strong> ${count.toLocaleString('es-MX')} polígono${count === 1 ? '' : 's'} · ${formatoHectareas(ha)}.`;
+  if (descargas) descargas.hidden = count === 0;
+}
+
+function initDescargasMunicipio() {
+  document.getElementById('btnDescargaKmz').addEventListener('click', async () => {
+    const feats = apcFeaturesFiltradas();
+    if (!selectedMunicipio || !feats.length) return;
+    const btn = document.getElementById('btnDescargaKmz');
+    btn.disabled = true;
+    btn.textContent = 'Generando…';
+    try {
+      await descargarKmzMunicipio(selectedMunicipio, feats);
+    } catch (err) {
+      alert(err.message || 'No se pudo generar el KMZ.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'KMZ';
+    }
+  });
+  document.getElementById('btnDescargaShp').addEventListener('click', () => {
+    const feats = apcFeaturesFiltradas();
+    if (!selectedMunicipio || !feats.length) return;
+    const btn = document.getElementById('btnDescargaShp');
+    btn.disabled = true;
+    btn.textContent = 'Generando…';
+    try {
+      descargarShpMunicipio(selectedMunicipio, feats);
+    } catch (err) {
+      alert(err.message || 'No se pudo generar el Shapefile.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Shapefile (SHP)';
+    }
+  });
 }
 
 function estiloLimiteMunicipio() {
@@ -183,6 +229,7 @@ function initFiltroMunicipio() {
     reconstruirCapaApc();
   });
   document.getElementById('chkLimiteMunicipio').addEventListener('change', mostrarLimiteMunicipio);
+  initDescargasMunicipio();
 }
 
 function estiloResaltado() {

@@ -806,6 +806,29 @@ table.tabla-anp tfoot td {
   margin-top: 4px;
 }
 
+.apc-descargas-municipio {
+  margin-bottom: 10px;
+}
+
+.apc-descargas-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.btn-descarga {
+  flex: 1;
+  min-width: 120px;
+  padding: 7px 12px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.btn-descarga:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
 .ndvi-controls {
   border-bottom: 1px solid var(--borde);
   padding-bottom: 14px;
