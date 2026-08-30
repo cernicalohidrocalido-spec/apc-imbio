@@ -52,6 +52,52 @@
     <div class="chart-box"><h2>Primario vs secundario</h2><canvas id="chartEstado"></canvas></div>
   </div>
 
+  <section id="analisis-municipal" class="ndvi-comparacion-section">
+    <h2 style="color:var(--verde-oscuro); font-size:1.35rem; margin-bottom:8px;">Análisis municipal del catálogo APC</h2>
+    <p class="analisis-intro" style="margin-bottom:12px;">
+      Distribución de polígonos y superficie por municipio (límite INEGI).
+      <a href="visor.html">Consultar y descargar por municipio en el visor</a>
+    </p>
+    <p id="municipalResumen" class="ndvi-load-status">Cargando análisis municipal…</p>
+    <div class="tabla-wrap">
+      <table class="tabla-anp tabla-ndvi">
+        <caption>Superficie APC, vegetación primaria/secundaria y NDVI medio por municipio</caption>
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Municipio</th>
+            <th>Polígonos</th>
+            <th>Superficie (ha)</th>
+            <th>% total</th>
+            <th>Primario (ha)</th>
+            <th>Secundario (ha)</th>
+            <th>NDVI 2016</th>
+            <th>NDVI 2026</th>
+            <th>Cambio</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="municipalTablaBody"></tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2">TOTAL ESTADO</td>
+            <td id="munTotalPoligonos">—</td>
+            <td id="munTotalHa">—</td>
+            <td>100%</td>
+            <td id="munTotalPrim">—</td>
+            <td id="munTotalSec">—</td>
+            <td colspan="4"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="charts-row" style="margin-top:20px;">
+      <div class="chart-box"><h2>Superficie APC por municipio</h2><canvas id="chartMunicipiosHa"></canvas></div>
+      <div class="chart-box"><h2>NDVI medio 2016 vs 2026 por municipio</h2><canvas id="chartMunicipiosNdvi"></canvas></div>
+    </div>
+    <p class="nota-tabla" id="municipalNota" style="padding-left:0;">—</p>
+  </section>
+
   <section id="ndvi-global" class="ndvi-comparacion-section">
     <h2 style="color:var(--verde-oscuro); font-size:1.35rem; margin-bottom:8px;">Cobertura vegetal global del catálogo APC · NDVI 2016–2026</h2>
     <p class="analisis-intro" style="margin-bottom:12px;">
@@ -93,6 +139,109 @@ function fmtPct(n) {
   if (n == null || Number.isNaN(Number(n))) return '—';
   const sign = n >= 0 ? '+' : '';
   return `${sign}${Number(n).toFixed(1)}%`;
+}
+
+async function renderAnalisisMunicipal(meta, ndviData) {
+  const resumenEl = document.getElementById('municipalResumen');
+  const tbody = document.getElementById('municipalTablaBody');
+  const notaEl = document.getElementById('municipalNota');
+  const municipios = meta.municipios || {};
+  const ndviByMun = ndviData?.byMunicipio || {};
+  const filas = Object.entries(municipios).sort((a, b) => b[1].hectareas - a[1].hectareas);
+  const totalHa = meta.totalHectareas;
+
+  if (!filas.length) {
+    resumenEl.innerHTML = '<span class="ndvi-stats-error">Sin datos municipales. Ejecute scripts/asignar_municipios_apc.py y compute_apc_municipios.py.</span>';
+    return;
+  }
+
+  const top = filas.slice(0, 3).map(([nombre, d]) =>
+    `${nombre} (${formatoHa(d.hectareas)}, ${((d.hectareas / totalHa) * 100).toFixed(1)}%)`
+  ).join('; ');
+  const mayorSuperficie = filas[0];
+  const menorSuperficie = filas[filas.length - 1];
+
+  let mayorCaida = null;
+  let mayorSubida = null;
+  filas.forEach(([nombre]) => {
+    const r = ndviByMun[nombre]?.resumen;
+    if (!r || r.changePercent == null) return;
+    if (!mayorCaida || r.changePercent < mayorCaida[1].changePercent) mayorCaida = [nombre, r];
+    if (!mayorSubida || r.changePercent > mayorSubida[1].changePercent) mayorSubida = [nombre, r];
+  });
+
+  resumenEl.innerHTML = `
+    <strong>Resumen:</strong> el catálogo se distribuye en <strong>${filas.length} municipios</strong>.
+    Mayor superficie: <strong>${mayorSuperficie[0]}</strong> (${formatoHa(mayorSuperficie[1].hectareas)}).
+    Menor: <strong>${menorSuperficie[0]}</strong> (${formatoHa(menorSuperficie[1].hectareas)}).
+    Concentración principal: ${top}.
+    ${mayorCaida ? `Mayor disminución de NDVI 2016–2026: <strong>${mayorCaida[0]}</strong> (${fmtPct(mayorCaida[1].changePercent)}).` : ''}
+    ${mayorSubida && mayorSubida[1].changePercent > 0 ? `Único aumento neto de NDVI: <strong>${mayorSubida[0]}</strong> (${fmtPct(mayorSubida[1].changePercent)}).` : ''}`;
+  resumenEl.classList.remove('ndvi-load-status');
+
+  document.getElementById('munTotalPoligonos').textContent = meta.totalPoligonos.toLocaleString('es-MX');
+  document.getElementById('munTotalHa').textContent = formatoHa(totalHa);
+  document.getElementById('munTotalPrim').textContent = formatoHa(meta.estadosConservacion.PRIMARIO || 0);
+  document.getElementById('munTotalSec').textContent = formatoHa(meta.estadosConservacion.SECUNDARIO || 0);
+
+  tbody.innerHTML = filas.map(([nombre, d], i) => {
+    const r = ndviByMun[nombre]?.resumen;
+    const pct = ((d.hectareas / totalHa) * 100).toFixed(2);
+    const cambio = r?.changePercent;
+    const cambioHtml = cambio == null
+      ? '—'
+      : `<span style="color:${cambio >= 0 ? '#15803d' : '#dc2626'}">${fmtPct(cambio)}</span>`;
+    const visorUrl = `visor.html?municipio=${encodeURIComponent(nombre)}`;
+    return `<tr>
+      <td>${i + 1}</td>
+      <td>${nombre}</td>
+      <td>${d.poligonos.toLocaleString('es-MX')}</td>
+      <td>${formatoHa(d.hectareas)}</td>
+      <td>${pct}%</td>
+      <td>${formatoHa(d.primario)}</td>
+      <td>${formatoHa(d.secundario)}</td>
+      <td>${r ? fmtNdvi(r.ndvi2016) : '—'}</td>
+      <td>${r ? fmtNdvi(r.ndvi2026) : '—'}</td>
+      <td>${cambioHtml}</td>
+      <td><a href="${visorUrl}">Visor →</a></td>
+    </tr>`;
+  }).join('');
+
+  notaEl.textContent = ndviData?.generatedAt
+    ? `NDVI municipal: unión de polígonos APC por municipio · Sentinel-2 mediana anual · api-cobertura.imbio.info · ${new Date(ndviData.generatedAt).toLocaleDateString('es-MX')}.`
+    : 'NDVI municipal no disponible.';
+
+  const labels = filas.map(([n]) => n);
+  new Chart(document.getElementById('chartMunicipiosHa'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Primario', data: filas.map(([, d]) => d.primario), backgroundColor: '#2f8f5b' },
+        { label: 'Secundario', data: filas.map(([, d]) => d.secundario), backgroundColor: '#aecbe6' },
+      ],
+    },
+    options: {
+      indexAxis: 'y',
+      scales: { x: { stacked: true, title: { display: true, text: 'Hectáreas' } }, y: { stacked: true } },
+    },
+  });
+
+  new Chart(document.getElementById('chartMunicipiosNdvi'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'NDVI 2016', data: filas.map(([n]) => ndviByMun[n]?.resumen?.ndvi2016 ?? null), backgroundColor: '#3A5A40' },
+        { label: 'NDVI 2026', data: filas.map(([n]) => ndviByMun[n]?.resumen?.ndvi2026 ?? null), backgroundColor: '#0B3D75' },
+      ],
+    },
+    options: {
+      scales: {
+        y: { min: 0, max: 0.45, title: { display: true, text: 'NDVI medio' } },
+      },
+    },
+  });
 }
 
 async function renderNdviGlobal() {
@@ -208,6 +357,7 @@ async function init() {
     options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Hectáreas' } } } },
   });
 
+  await renderAnalisisMunicipal(meta, await fetch('data/apc_ndvi_municipios.json').then((r) => (r.ok ? r.json() : {})).catch(() => ({})));
   await renderNdviGlobal();
 }
 init();

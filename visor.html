@@ -232,6 +232,19 @@ function initFiltroMunicipio() {
   initDescargasMunicipio();
 }
 
+function aplicarMunicipioDesdeUrl() {
+  const param = new URLSearchParams(location.search).get('municipio');
+  if (!param) return;
+  const sel = document.getElementById('selMunicipio');
+  const existe = [...sel.options].some((o) => o.value === param);
+  if (!existe) return;
+  sel.value = param;
+  selectedMunicipio = param;
+  document.getElementById('chkApc').checked = true;
+  document.getElementById('chkLimiteMunicipio').checked = true;
+  reconstruirCapaApc();
+}
+
 function estiloResaltado() {
   return { color: '#1b4332', weight: 3, fillColor: '#b08968', fillOpacity: 0.5 };
 }
@@ -349,6 +362,7 @@ async function init() {
   });
   initFiltroMunicipio();
   actualizarResumenMunicipio();
+  aplicarMunicipioDesdeUrl();
   document.getElementById('chkApc').addEventListener('change', (e) => {
     if (e.target.checked) capaAPC.addTo(map);
     else map.removeLayer(capaAPC);

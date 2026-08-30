@@ -27,5 +27,84 @@
   "biomasa": {
     "descripcion": "Biomasa aérea y subterránea: carbono en vegetación y raíces (t C), según factores INECC (2022). Carbono absorbido = (aérea + subterránea) × 44/12 (t CO₂e).",
     "referencia": "INECC. Metodología para el cálculo de la captura de carbono en Áreas Naturales Protegidas. 2022."
+  },
+  "municipios": {
+    "Jesús María": {
+      "poligonos": 101,
+      "hectareas": 14314.64,
+      "primario": 4430.74,
+      "secundario": 9883.91,
+      "carbono_absorbido": 13161.31
+    },
+    "Aguascalientes": {
+      "poligonos": 195,
+      "hectareas": 13034.35,
+      "primario": 4602.07,
+      "secundario": 8432.28,
+      "carbono_absorbido": 8416.03
+    },
+    "Calvillo": {
+      "poligonos": 105,
+      "hectareas": 7806.3,
+      "primario": 2203.79,
+      "secundario": 5602.5,
+      "carbono_absorbido": 11545.7
+    },
+    "Asientos": {
+      "poligonos": 100,
+      "hectareas": 6446.77,
+      "primario": 2710.68,
+      "secundario": 3736.09,
+      "carbono_absorbido": 4767.36
+    },
+    "Rincón de Romos": {
+      "poligonos": 40,
+      "hectareas": 4580.18,
+      "primario": 1306.25,
+      "secundario": 3273.93,
+      "carbono_absorbido": 4686.14
+    },
+    "El Llano": {
+      "poligonos": 28,
+      "hectareas": 3857.44,
+      "primario": 2457.32,
+      "secundario": 1400.12,
+      "carbono_absorbido": 1444.27
+    },
+    "Tepezalá": {
+      "poligonos": 39,
+      "hectareas": 3156.66,
+      "primario": 846.61,
+      "secundario": 2310.04,
+      "carbono_absorbido": 1553.35
+    },
+    "San Francisco de los Romo": {
+      "poligonos": 26,
+      "hectareas": 2811.08,
+      "primario": 715.75,
+      "secundario": 2095.33,
+      "carbono_absorbido": 1196.05
+    },
+    "San José de Gracia": {
+      "poligonos": 44,
+      "hectareas": 2799.77,
+      "primario": 1681.56,
+      "secundario": 1118.21,
+      "carbono_absorbido": 2415.79
+    },
+    "Cosío": {
+      "poligonos": 46,
+      "hectareas": 1757.4,
+      "primario": 157.31,
+      "secundario": 1600.08,
+      "carbono_absorbido": 2568.98
+    },
+    "Pabellón de Arteaga": {
+      "poligonos": 15,
+      "hectareas": 392.02,
+      "primario": 0.0,
+      "secundario": 392.02,
+      "carbono_absorbido": 1509.28
+    }
   }
 }

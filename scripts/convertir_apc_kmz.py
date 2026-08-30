@@ -92,6 +92,9 @@ def main() -> None:
         import subprocess
         import sys
         subprocess.run([sys.executable, str(assign)], check=True)
+        compute_mun = ROOT / "scripts" / "compute_apc_municipios.py"
+        if compute_mun.exists():
+            subprocess.run([sys.executable, str(compute_mun)], check=True)
 
     total_ha = round(float(gdf["hectareas"].sum()), 2)
     meta = {
