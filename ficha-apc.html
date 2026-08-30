@@ -87,6 +87,10 @@ async function init() {
             Mostrar capa NDVI recortada al polígono
           </label>
           <label class="ndvi-field">Año <select id="selFichaNdviYear"></select></label>
+          <label class="ndvi-field">
+            Opacidad <span id="fichaNdviOpacityVal">85%</span>
+            <input type="range" id="rngFichaNdviOpacity" min="20" max="100" value="85">
+          </label>
           <p class="ndvi-hint">Con la capa activa, clic en el mapa para consultar NDVI.</p>
         </div>
       </div>
@@ -132,6 +136,11 @@ async function init() {
   selYear.addEventListener('change', () => {
     ndviCtrl.setYear(Number(selYear.value));
     updateNdviLegendYear(ndviLegendEl, Number(selYear.value));
+  });
+  document.getElementById('rngFichaNdviOpacity').addEventListener('input', (e) => {
+    const opacity = Number(e.target.value) / 100;
+    document.getElementById('fichaNdviOpacityVal').textContent = `${e.target.value}%`;
+    ndviCtrl.setOpacity(opacity);
   });
   ndviIdentify.refreshCursor();
   fetchAnpNdviStats(feature, props.id)
