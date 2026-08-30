@@ -117,6 +117,16 @@ nav.site-nav a:hover, nav.site-nav a.active {
   text-decoration: none;
 }
 
+nav.site-nav a.nav-portal-imbio {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.38);
+  white-space: nowrap;
+}
+
+nav.site-nav a.nav-portal-imbio:hover {
+  background: rgba(255,255,255,0.22);
+}
+
 main {
   max-width: 1180px;
   margin: 0 auto;
