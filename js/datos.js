@@ -45,9 +45,23 @@ function estiloAPC(feature) {
   };
 }
 
+// La capa del catálogo trae TIPO_VGT en mayúsculas sin acentos; se corrige solo al mostrarlo.
+const ETIQUETAS_VEGETACION = {
+  'BOSQUE DE ENCINO': 'Bosque de encino',
+  'BOSQUE DE GALERIA': 'Bosque de galería',
+  'BOSQUE DE JUNIPERO': 'Bosque de junípero',
+  'BOSQUE DE MEZQUITE': 'Bosque de mezquite',
+  'BOSQUE DE PINO-ENCINO': 'Bosque de pino-encino',
+  'MATORRAL CRASICAULE': 'Matorral crasicaule',
+  'MATORRAL DESERTICO MICROFILO': 'Matorral desértico micrófilo',
+  'PASTIZAL NATURAL': 'Pastizal natural',
+  'SELVA BAJA CADUCIFOLIA': 'Selva baja caducifolia',
+  'TULAR': 'Tular',
+};
+
 function tituloVegetacion(tipo) {
   if (!tipo) return '—';
-  return tipo.charAt(0) + tipo.slice(1).toLowerCase();
+  return ETIQUETAS_VEGETACION[tipo] || tipo.charAt(0) + tipo.slice(1).toLowerCase();
 }
 
 function apcBadgeClass(estado) {
